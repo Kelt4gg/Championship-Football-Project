@@ -1,4 +1,4 @@
-package ProjetoCampeonato;
+package projetocampeonato;
 
 public class Clube {
     private String nome;

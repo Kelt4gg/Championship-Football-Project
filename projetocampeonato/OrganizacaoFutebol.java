@@ -1,4 +1,4 @@
-package projetoCampeonato;
+package projetocampeonato;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class OrganizacaoFutebol {
     }
 
     public void organiza() {
-        String path = "C:\\workspace\\Faculdade\\trabalho\\clubes.csv";
+        String path = "C:\\Users\\Kevin S\\Documents\\GitHub\\Championship-Football-Project\\projetocampeonato\\clubes.csv";
         File file = null;
         Scanner scan = null;
         ArrayList<Integer> numbers = sorteio();
@@ -59,7 +59,7 @@ public class OrganizacaoFutebol {
     }
 
     public int contaTimes() {
-        String path = "C:\\workspace\\Faculdade\\trabalho\\clubes.csv";
+        String path = "C:\\Users\\Kevin S\\Documents\\GitHub\\Championship-Football-Project\\projetocampeonato\\clubes.csv";
         File file = null;
         Scanner scan = null;
         int counter = 0;

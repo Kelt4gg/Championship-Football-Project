@@ -1,4 +1,4 @@
-package projetoCampeonato;
+package projetocampeonato;
 
 public class Principal{
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package projetoCampeonato;
+package projetocampeonato;
 public abstract class Campeonato {
     OrganizacaoFutebol cbf;
     int qTimes;
