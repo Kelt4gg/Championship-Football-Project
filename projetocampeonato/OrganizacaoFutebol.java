@@ -16,7 +16,7 @@ public class OrganizacaoFutebol {
     }
 
     public void organiza() {
-        String path = "C:\\Users\\Kevin S\\Documents\\GitHub\\Championship-Football-Project\\projetocampeonato\\clubes.csv";
+        String path = "projetocampeonato/clubes.csv";
         File file = null;
         Scanner scan = null;
         ArrayList<Integer> numbers = sorteio();
@@ -59,7 +59,7 @@ public class OrganizacaoFutebol {
     }
 
     public int contaTimes() {
-        String path = "C:\\Users\\Kevin S\\Documents\\GitHub\\Championship-Football-Project\\projetocampeonato\\clubes.csv";
+        String path = "projetocampeonato/clubes.csv";
         File file = null;
         Scanner scan = null;
         int counter = 0;
@@ -72,8 +72,8 @@ public class OrganizacaoFutebol {
                 counter++;
             }
         } catch (IOException e) {
-            // TODO: handle exception
             System.out.println(e);
+        } finally {
             scan.close();
         }
         return counter;

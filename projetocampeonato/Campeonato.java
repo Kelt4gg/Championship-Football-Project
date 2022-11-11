@@ -1,7 +1,8 @@
 package projetocampeonato;
 public abstract class Campeonato {
-    OrganizacaoFutebol cbf;
-    int qTimes;
+    private OrganizacaoFutebol cbf;
+    private int qTimes;
+    private int rodada;
 
     public abstract Clube match(Clube time1, Clube time2);
 
@@ -23,6 +24,14 @@ public abstract class Campeonato {
 
     public void setqTimes(int qTimes) {
         this.qTimes = qTimes;
+    }
+
+    public void setRodada(int rodada) {
+        this.rodada = rodada;
+    }
+    
+    public int getRodada() {
+        return rodada;
     }
 
     

@@ -5,6 +5,6 @@ public class Principal{
         CopaBrasil cB = new CopaBrasil();
         cB.organiza();
         cB.torneio();
-
+        cB.EscalacaoTimes();
     }
 }

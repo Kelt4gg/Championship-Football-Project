@@ -7,9 +7,10 @@ public class CopaBrasil extends Campeonato{
     private ArrayList<Clube> chave;
 
     public CopaBrasil() {
-        super.cbf = new OrganizacaoFutebol();
-        super.qTimes = cbf.getqTimes() / 2;
+        super.setCbf(new OrganizacaoFutebol());
+        super.setqTimes(getCbf().getqTimes() / 2);
         this.chave = new ArrayList<Clube>();
+        super.setRodada(1);
         
     }
 
@@ -26,10 +27,10 @@ public class CopaBrasil extends Campeonato{
     }
 
     public void organiza() {
-        super.cbf.organiza();
+        super.getCbf().organiza();
         ArrayList<Integer> numbers = sorteio();
         for(int k = 0; k < numbers.size(); k++) {
-            this.chave.add(cbf.getClubes().get(numbers.get(k)));
+            this.chave.add(super.getCbf().getClubes().get(numbers.get(k)));
         }
     }
 
@@ -38,15 +39,25 @@ public class CopaBrasil extends Campeonato{
             System.out.println("Tabela ainda não organizada!!z");
             return;
         }
-        
+        int espaçosInicial = 5 * (super.getRodada() * 3);
+        int espaçosEntreTimesFora = 2 * (getRodada() * getRodada());
         int counter = 1;
-        System.out.println("---------------------------------");
         for(Clube time : this.chave) {
-            System.out.printf("| Time[%d] %22s|\n",counter,time.getNome());
+            if(counter == 1) {
+                System.out.print(" ".repeat(espaçosInicial));
+            }
+            if(counter % 2 == 1) {
+                System.out.printf("[%s",time.getNome());
+                if(counter < this.chave.size()) {
+                    System.out.printf("  x  ");
+                }
+            } else {
+                System.out.printf("%s]",time.getNome());
+                System.out.printf(" ".repeat(espaçosEntreTimesFora));
+            }
             counter++;
         }
-        System.out.println("---------------------------------");
-        System.out.println();
+        System.out.println("\n");
     }
     
     @Override
@@ -79,13 +90,13 @@ public class CopaBrasil extends Campeonato{
             for(int kk = this.chave.size()/2-1; kk >= 0; kk--) {
                 this.chave.remove(this.match(this.chave.get(kk*2), this.chave.get(kk*2+1)));
             }
+            super.setRodada(super.getRodada()+1);;
         }
     }
 
     @Override
     public void torneio() {
         this.rodada(4);
-        // TODO Auto-generated method stub
         return;
     }
 
