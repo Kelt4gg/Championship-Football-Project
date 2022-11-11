@@ -45,7 +45,7 @@ public class OrganizacaoFutebol {
         while(numbers.size() != qTimes) {
             Random gerador = new Random();
             int number = gerador.nextInt(qTimes);
-            if(numbers.contains(number) == false) {
+            if(!numbers.contains(number)) {
                 numbers.add(number);
             }
         }

@@ -18,7 +18,7 @@ public class CopaBrasil extends Campeonato{
         Random randomizer = new Random();
         while(numbers.size() != super.getqTimes()) {
             int number = randomizer.nextInt(super.getqTimes());
-            if(numbers.contains(number) == false) {
+            if(!numbers.contains(number)) {
                 numbers.add(number);
             }
         }
@@ -35,23 +35,24 @@ public class CopaBrasil extends Campeonato{
 
     public void EscalacaoTimes() {
         if(this.chave.isEmpty()) {
-            System.out.println("Tabela ainda não organizada!!");
+            System.out.println("Tabela ainda não organizada!!z");
             return;
         }
         
         int counter = 1;
+        System.out.println("---------------------------------");
         for(Clube time : this.chave) {
-            System.out.printf("Time[%d] %s\n",counter,time.getNome());
+            System.out.printf("| Time[%d] %22s|\n",counter,time.getNome());
             counter++;
         }
+        System.out.println("---------------------------------");
+        System.out.println();
     }
     
     @Override
     public Clube match(Clube time1, Clube time2) {
         int probabilidade = 49;
         probabilidade += time1.getScore() - time2.getScore();
-        System.out.printf("%d | %d (%d)\n", time1.getScore(), time2.getScore(), time1.getScore() - time2.getScore());
-        System.out.println(probabilidade);
         Random randomizer = new Random();
         int number = randomizer.nextInt(100);
         if(number <= probabilidade) {
@@ -62,28 +63,28 @@ public class CopaBrasil extends Campeonato{
     }
 
     @Override
-    public boolean rodada(int qRodada) {
+    public void rodada(int qRodada) {
         if(this.chave.isEmpty()) {
             System.out.println("Tabela ainda não organizada!!");
-            return false;
+            return;
         }
-        if(this.chave.size() == 1) {    
-            System.out.printf("O %s Ganhou a Copa do Brasil",this.chave.get(0).getNome());
-            return true;
-        } else {
-            for(int k = 0; k < qRodada; k++) {
-                for(int kk = this.chave.size()/2-1; kk >= 0; kk--) {
-                    this.chave.remove(this.match(this.chave.get(kk*2), this.chave.get(kk*2+1)));
-                }
+        System.out.println(this.chave.size());
+
+        for(int k = 0; k < qRodada; k++) {
+            if(this.chave.size() <= 1) {
+                System.out.printf("O %s é o vencedor da Copa do Brasil!!!\n", this.chave.get(0).getNome());
+                return;
             }
             this.EscalacaoTimes();
-            return true;
+            for(int kk = this.chave.size()/2-1; kk >= 0; kk--) {
+                this.chave.remove(this.match(this.chave.get(kk*2), this.chave.get(kk*2+1)));
+            }
         }
     }
 
     @Override
     public void torneio() {
-
+        this.rodada(4);
         // TODO Auto-generated method stub
         return;
     }
