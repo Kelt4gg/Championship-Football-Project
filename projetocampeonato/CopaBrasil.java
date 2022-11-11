@@ -7,7 +7,7 @@ public class CopaBrasil extends Campeonato{
     private ArrayList<Clube> chave;
 
     public CopaBrasil() {
-        super.setCbf(new OrganizacaoFutebol());
+        super.setCbf(new OrganizacaoFutebol(1));
         super.setqTimes(getCbf().getqTimes() / 2);
         this.chave = new ArrayList<Clube>();
         super.setRodada(1);

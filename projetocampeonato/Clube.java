@@ -1,5 +1,7 @@
 package projetocampeonato;
 
+import java.util.ArrayList;
+
 public class Clube {
     private String nome;
     private int fundacao;
@@ -7,6 +9,7 @@ public class Clube {
     private double torcida;
     private int score;
     private int pontuacao;
+    private ArrayList<String> confrontos;
 
     public Clube(String nome, int fundacao, String local, double torcida, int score) {
         this.nome = nome;
@@ -63,6 +66,14 @@ public class Clube {
     
     public void setPontuacao(int pontuacao) {
         this.pontuacao = pontuacao;
+    }
+
+    public ArrayList<String> getConfrontos() {
+        return confrontos;
+    }
+
+    public void setConfrontos(ArrayList<String> confrontos) {
+        this.confrontos = confrontos;
     }
 
     

@@ -10,7 +10,7 @@ public class OrganizacaoFutebol {
     private int qTimes;
 
 
-    public OrganizacaoFutebol() {
+    public OrganizacaoFutebol(int option) {
         this.clubes = new ArrayList<Clube>();
         this.qTimes = contaTimes();
     }
