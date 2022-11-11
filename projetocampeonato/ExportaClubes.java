@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class ExportaClubes {
     
     public static void main(String[] args) throws IOException {
-        String path = "c:\\workspace\\Faculdade\\trabalho\\clubes.csv";
+        String path = "C:\\Users\\Kevin S\\Documents\\GitHub\\Championship-Football-Project\\projetocampeonato\\clubes.csv";
         File file = new File(path);
         Scanner scanfile = null;
         FileWriter fw = null;

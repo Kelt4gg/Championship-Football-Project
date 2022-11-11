@@ -6,7 +6,7 @@ public class Clube {
     private String local;
     private double torcida;
     private int score;
-    private int pontuação;
+    private int pontuacao;
 
     public Clube(String nome, int fundacao, String local, double torcida, int score) {
         this.nome = nome;
@@ -14,7 +14,7 @@ public class Clube {
         this.local = local;
         this.torcida = torcida;
         this.score = score;
-        this.pontuação = 0;
+        this.pontuacao = 0;
     }
 
     public String getNome() {
@@ -57,12 +57,13 @@ public class Clube {
         this.score = score;
     }
 
-    public int getPontuação() {
-        return pontuação;
+    public int getPontuacao() {
+        return pontuacao;
+    }
+    
+    public void setPontuacao(int pontuacao) {
+        this.pontuacao = pontuacao;
     }
 
-    public void setPontuação(int pontuação) {
-        this.pontuação = pontuação;
-    }
     
 }

@@ -5,7 +5,7 @@ public abstract class Campeonato {
 
     public abstract Clube match(Clube time1, Clube time2);
 
-    public abstract void rodada(int qRodada);
+    public abstract boolean rodada(int qRodada);
 
     public abstract void torneio();
 

@@ -49,8 +49,9 @@ public class CopaBrasil extends Campeonato{
     @Override
     public Clube match(Clube time1, Clube time2) {
         int probabilidade = 49;
-        probabilidade += time1.getPontuação() - time2.getPontuação();
-        System.out.printf("%d | %d (%d)\n", time1.getPontuação(), time2.getPontuação(), time1.getPontuação() - time2.getPontuação());
+        probabilidade += time1.getScore() - time2.getScore();
+        System.out.printf("%d | %d (%d)\n", time1.getScore(), time2.getScore(), time1.getScore() - time2.getScore());
+        System.out.println(probabilidade);
         Random randomizer = new Random();
         int number = randomizer.nextInt(100);
         if(number <= probabilidade) {
@@ -59,23 +60,30 @@ public class CopaBrasil extends Campeonato{
             return time1;
         }
     }
+
     @Override
-    public void rodada(int qRodada) {
+    public boolean rodada(int qRodada) {
         if(this.chave.isEmpty()) {
             System.out.println("Tabela ainda não organizada!!");
-            return;
+            return false;
         }
-        for(int k = 0; k < qRodada; k++) {
-            for(int kk = this.chave.size()/2-1; kk >= 0; kk--) {
-                this.chave.remove(this.match(this.chave.get(kk*2), this.chave.get(kk*2+1)));
+        if(this.chave.size() == 1) {    
+            System.out.printf("O %s Ganhou a Copa do Brasil",this.chave.get(0).getNome());
+            return true;
+        } else {
+            for(int k = 0; k < qRodada; k++) {
+                for(int kk = this.chave.size()/2-1; kk >= 0; kk--) {
+                    this.chave.remove(this.match(this.chave.get(kk*2), this.chave.get(kk*2+1)));
+                }
             }
+            this.EscalacaoTimes();
+            return true;
         }
-        this.EscalacaoTimes();
-        // TODO Auto-generated method stub
-        
     }
+
     @Override
     public void torneio() {
+
         // TODO Auto-generated method stub
         return;
     }
