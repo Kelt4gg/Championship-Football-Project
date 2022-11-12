@@ -7,18 +7,33 @@ public class CopaBrasil extends Campeonato{
     private ArrayList<Clube> chave;
 
     public CopaBrasil() {
-        super.setCbf(new OrganizacaoFutebol(1));
-        super.setqTimes(getCbf().getqTimes() / 2);
         this.chave = new ArrayList<Clube>();
         super.setRodada(1);
-        
+    }
+
+    public void geraChave(ArrayList<Integer> numbers) {
+        try {
+            if(super.getClubesColocados().isEmpty()) {
+                System.out.println("Deve ser termindado o Brasileirão");
+                return;
+            }
+        } catch (Exception e) {
+            System.out.println("Deve ser termindado o Brasileirão");
+            return;
+        }
+        for(Integer number : numbers){
+            chave.add(super.getClubesColocados().get(number));
+        }
+        System.out.println("Chave:");
+        tabela();
+
     }
 
     public ArrayList<Integer> sorteio() {
         ArrayList<Integer> numbers = new ArrayList<Integer>();
-        Random randomizer = new Random();
         while(numbers.size() != super.getqTimes()) {
-            int number = randomizer.nextInt(super.getqTimes());
+            Random gerador = new Random();
+            int number = gerador.nextInt(super.getqTimes());
             if(!numbers.contains(number)) {
                 numbers.add(number);
             }
@@ -26,15 +41,8 @@ public class CopaBrasil extends Campeonato{
         return numbers;
     }
 
-    public void organiza() {
-        super.getCbf().organiza();
-        ArrayList<Integer> numbers = sorteio();
-        for(int k = 0; k < numbers.size(); k++) {
-            this.chave.add(super.getCbf().getClubes().get(numbers.get(k)));
-        }
-    }
-
-    public void EscalacaoTimes() {
+    @Override
+    public void tabela() {
         if(this.chave.isEmpty()) {
             System.out.println("Tabela ainda não organizada!!z");
             return;
@@ -86,7 +94,7 @@ public class CopaBrasil extends Campeonato{
                 System.out.printf("O %s é o vencedor da Copa do Brasil!!!\n", this.chave.get(0).getNome());
                 return;
             }
-            this.EscalacaoTimes();
+            this.tabela();
             for(int kk = this.chave.size()/2-1; kk >= 0; kk--) {
                 this.chave.remove(this.match(this.chave.get(kk*2), this.chave.get(kk*2+1)));
             }

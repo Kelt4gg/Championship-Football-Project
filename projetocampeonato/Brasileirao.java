@@ -1,34 +1,48 @@
 package projetocampeonato;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Brasileirao extends Campeonato{
-    private ArrayList<Clube> clubes;
-    private ArrayList<String> naoDisponiveis;
+    private ArrayList<ClubeBrasileirao> clubes;
 
     public Brasileirao() {
-        clubes = new ArrayList<Clube>();
-        naoDisponiveis = new ArrayList<String>();
-        super.setCbf(new OrganizacaoFutebol(2));
-        super.getCbf().organiza();
-        super.setqTimes(getCbf().getqTimes());
+        clubes = new ArrayList<ClubeBrasileirao>();
+        super.setRodada(1);
+        EscalaTimes();
     }
 
-    public void inicializaClubes() {
-        System.out.println(super.getCbf().getClubes().get(0));
-        ArrayList<Clube> clubesCBF = super.getCbf().getClubes();
-        for(Clube clube : clubesCBF) {
-            this.clubes.add(clube);
+    public void EscalaTimes() {
+        String path = "projetocampeonato/clubes.csv";
+        File file = null;
+        Scanner scan = null;
+        try {
+            file = new File(path);
+            scan = new Scanner(file);
+            scan.nextLine();
+            int k = 0;
+            while(scan.hasNext()) {
+                String line = scan.nextLine();
+                String[] separeted = line.split(",");
+                this.clubes.add(new Clube(separeted[0], Integer.parseInt(separeted[1]), separeted[2], Double.parseDouble(separeted[3]), Integer.parseInt(separeted[4])));
+                k++;
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        } finally {
+            scan.close();
         }
-
     }
-
-    public void escalacao() {
+    
+    @Override
+    public void tabela() {
         organizaEscalacao();
-        for(Clube clube : this.clubes) {
-            System.out.printf("%20s %d\n", clube.getNome(), clube.getPontuacao());
+        for(Clube time : clubes) {
+            System.out.println(time.getNome());
         }
     }
 
@@ -75,4 +89,9 @@ public class Brasileirao extends Campeonato{
         // TODO Auto-generated method stub
         
     }
+
+    public void passarColocados() {
+
+    }
+
 }

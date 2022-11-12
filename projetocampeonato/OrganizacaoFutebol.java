@@ -10,12 +10,12 @@ public class OrganizacaoFutebol {
     private int qTimes;
 
 
-    public OrganizacaoFutebol(int option) {
+    public OrganizacaoFutebol() {
         this.clubes = new ArrayList<Clube>();
         this.qTimes = contaTimes();
     }
 
-    public void organiza() {
+    public void EscalaTimes() {
         String path = "projetocampeonato/clubes.csv";
         File file = null;
         Scanner scan = null;
@@ -52,7 +52,7 @@ public class OrganizacaoFutebol {
         return numbers;
     }
 
-    public void EscalacaoTimes() {
+    public void Tabela() {
         for(Clube time : clubes) {
             System.out.println(time.getNome());
         }
