@@ -1,13 +1,11 @@
 package projetocampeonato;
 
-import java.util.ArrayList;
-
 public class Clube {
-    private String nome;
-    private int fundacao;
-    private String local;
-    private double torcida;
-    private int score;
+    private String nome; // Variável que armazena o nome 
+    private int fundacao; // Variável que armazena o ano de fundação do clube
+    private String local; // Variável que armazena o nome do estádio do clube
+    private double torcida; //Variável que armazena a quantidade de torcedores do clube
+    private int score; //Variável que armazena a avaliação do clube
 
     public Clube(String nome, int fundacao, String local, double torcida, int score) {
         this.nome = nome;

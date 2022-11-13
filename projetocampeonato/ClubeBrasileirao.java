@@ -3,8 +3,8 @@ package projetocampeonato;
 import java.util.ArrayList;
 
 public class ClubeBrasileirao extends Clube{
-    private int pontuacao;
-    private ArrayList<ClubeBrasileirao> confrontos;
+    private int pontuacao; // Varíavel que armazena a pontuação do clube
+    private ArrayList<ClubeBrasileirao> confrontos; // Variável que armazena os clubes que o clube já enfrentou
 
     public ClubeBrasileirao(String nome, int fundacao, String local, double torcida, int score) {
         super(nome, fundacao, local, torcida, score);

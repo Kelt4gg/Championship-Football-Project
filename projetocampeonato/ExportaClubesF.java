@@ -1,10 +1,11 @@
+//Classe sem função por enquanto
 package projetocampeonato;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class ExportaClubes {
+public class ExportaClubesF {
     
     public static void main(String[] args) throws IOException {
         String path = "C:\\Users\\Kevin S\\Documents\\GitHub\\Championship-Football-Project\\projetocampeonato\\clubes.csv";

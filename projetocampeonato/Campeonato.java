@@ -20,12 +20,13 @@ public abstract class Campeonato {
 
     public abstract void tabela();
 
+    //Conta a quantidade de clubes armazenados no clubes.csv
     private int contaTimes() {
         String path = "projetocampeonato/clubes.csv";
         File file = null;
         Scanner scan = null;
         int counter = 0;
-        try {
+        try { // Instancia 
             file = new File(path);
             scan = new Scanner(file);
             scan.nextLine();

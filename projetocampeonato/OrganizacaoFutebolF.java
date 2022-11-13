@@ -1,3 +1,4 @@
+//Classe sem função por enquanto
 package projetocampeonato;
 import java.io.File;
 import java.io.IOException;
@@ -5,12 +6,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Random;
 
-public class OrganizacaoFutebol {
+public class OrganizacaoFutebolF {
     private ArrayList<Clube> clubes; 
     private int qTimes;
 
 
-    public OrganizacaoFutebol() {
+    public OrganizacaoFutebolF() {
         this.clubes = new ArrayList<Clube>();
         this.qTimes = contaTimes();
     }

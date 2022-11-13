@@ -85,7 +85,6 @@ public class Brasileirao extends Campeonato{
         }
         return clube2;
         
-
     }
 
     @Override
