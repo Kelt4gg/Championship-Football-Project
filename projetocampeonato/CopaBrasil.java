@@ -12,7 +12,7 @@ public class CopaBrasil extends Campeonato{
     }
 
     public void geraChave(ArrayList<Integer> numbers) {
-        try {
+        /*try {
             if(super.getClubesColocados().isEmpty()) {
                 System.out.println("Deve ser termindado o Brasileirão!!");
                 return;
@@ -25,7 +25,7 @@ public class CopaBrasil extends Campeonato{
             chave.add(super.getClubesColocados().get(number));
         }
         System.out.println("Chave:");
-        tabela();
+        tabela();*/
 
     }
 
@@ -42,7 +42,7 @@ public class CopaBrasil extends Campeonato{
     }
 
     @Override
-    public void tabela() {
+    public void classificacao() {
         if(this.chave.isEmpty()) {
             System.out.println("Tabela ainda não organizada!!");
             return;
@@ -93,7 +93,7 @@ public class CopaBrasil extends Campeonato{
                 System.out.printf("O %s é o vencedor da Copa do Brasil!!!\n", this.chave.get(0).getNome());
                 return;
             }
-            this.tabela();
+            this.classificacao();
             for(int kk = this.chave.size()/2-1; kk >= 0; kk--) {
                 match(this.chave.get(kk*2), this.chave.get(kk*2+1));
             }

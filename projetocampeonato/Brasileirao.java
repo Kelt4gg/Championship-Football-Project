@@ -8,12 +8,14 @@ import java.util.Scanner;
 
 public class Brasileirao extends Campeonato{
     private ArrayList<ClubeBrasileirao> clubes;
+    private ArrayList<ClubeBrasileirao> clubesAux;
     private ArrayList<ClubeBrasileirao> clubesDisponiveis;
 
     public Brasileirao() {
-        clubes = new ArrayList<ClubeBrasileirao>();
-        super.setRodada(1);
-        EscalaTimes();
+        setClubes(new ArrayList<ClubeBrasileirao>());
+        super.setRodada(0);
+        this.EscalaTimes();
+        this.setClubesColocados(new ArrayList<ClubeBrasileirao>(getClubes()));
     }
 
     private void EscalaTimes() {
@@ -37,19 +39,22 @@ public class Brasileirao extends Campeonato{
     }
     
     @Override
-    public void tabela() {
+    public void classificacao() {
         organizaEscalacao();
-        for(ClubeBrasileirao time : clubes) {
-            System.out.printf("%20s %d\n",time.getNome(),time.getPontuacao());
+
+        System.out.printf("Classificação da %d° rodada:\n\n", this.getRodada());
+        int posicao = 1;
+        for(ClubeBrasileirao clube : this.getClubesColocados()) {
+            System.out.printf("%d°%20s %d\n",posicao++,clube.getNome(),clube.getPontuacao());
         }
     }
 
     public void organizaEscalacao(){
-        for(int k = 0; k < this.clubes.size(); k++){
-            for(int kk = k+1; kk < this.clubes.size(); kk++){
-                if(clubes.get(k).getPontuacao() < clubes.get(kk).getPontuacao()){
-                    clubes.add(k, clubes.get(kk));
-                    clubes.remove(kk+1);
+        for(int k = 0; k < this.getClubesColocados().size(); k++){
+            for(int kk = k+1; kk < this.getClubesColocados().size(); kk++){
+                if(this.getClubesColocados().get(k).getPontuacao() < this.getClubesColocados().get(kk).getPontuacao()){
+                    this.getClubesColocados().add(k, getClubesColocados().get(kk));
+                    this.getClubesColocados().remove(kk+1);
                 } 
             }
         }
@@ -79,30 +84,33 @@ public class Brasileirao extends Campeonato{
     }
 
     public ClubeBrasileirao verificaDisponiveis(ClubeBrasileirao clube1, ClubeBrasileirao clube2) {
-        Random randomizer = new Random();
         while(clube1 == clube2 || this.getClubes().get(this.getClubes().indexOf(clube1)).getConfrontos().contains(clube2)) {
-            clube2 = this.getClubesDisponiveis().get(randomizer.nextInt(this.getClubesDisponiveis().size()));
+            clube2 = this.getClubesDisponiveis().get(getClubesDisponiveis().indexOf(clube2) + 1);
         }
         return clube2;
-        
+
     }
 
     @Override
     public void rodada(int qRodada) {
         for(int k = 0; k < qRodada; k++) {
             this.setClubesDisponiveis(new ArrayList<ClubeBrasileirao>(this.getClubes()));
+            this.setRodada(this.getRodada()+1);
+            System.out.println("-".repeat(50));
+            System.out.printf("Na %d° rodada:\n\n", this.getRodada());
             while(!this.getClubesDisponiveis().isEmpty()) {
-                Random randomizer = new Random();
-                ClubeBrasileirao clube1 = this.getClubesDisponiveis().get(randomizer.nextInt(this.getClubesDisponiveis().size()));
-                ClubeBrasileirao clube2 = this.getClubesDisponiveis().get(randomizer.nextInt(this.getClubesDisponiveis().size()));
+                ClubeBrasileirao clube1 = this.getClubesDisponiveis().get(0);
+                ClubeBrasileirao clube2 = this.getClubesDisponiveis().get(1);
                 clube2 = verificaDisponiveis(clube1, clube2);
+
                 this.getClubesDisponiveis().remove(getClubes().get(this.getClubes().indexOf(clube1)));
                 this.getClubesDisponiveis().remove(getClubes().get(this.getClubes().indexOf(clube2)));
                 match(clube1, clube2);
                 this.getClubes().get(getClubes().indexOf(clube1)).setConfrontos(clube2);
                 this.getClubes().get(getClubes().indexOf(clube2)).setConfrontos(clube1);
             }
-            tabela();
+            System.out.println("-".repeat(50));
+            classificacao();
         }
     }
 
@@ -113,8 +121,9 @@ public class Brasileirao extends Campeonato{
         
     }
 
-    public void passarColocados() {
-
+    public ArrayList<ClubeCopaBrasil> passarColocados() {
+        ArrayList<ClubeCopaBrasil> clubes = new ArrayList<ClubeCopaBrasil>();
+        return clubes;
     }
 
     public ArrayList<ClubeBrasileirao> getClubes() {
@@ -132,6 +141,12 @@ public class Brasileirao extends Campeonato{
     public void setClubesDisponiveis(ArrayList<ClubeBrasileirao> clubesDisponiveis) {
         this.clubesDisponiveis = clubesDisponiveis;
     }
-    
 
+    public ArrayList<ClubeBrasileirao> getClubesColocados() {
+        return clubesAux;
+    }
+
+    public void setClubesColocados(ArrayList<ClubeBrasileirao> clubesColocados) {
+        this.clubesAux = clubesColocados;
+    }
 }

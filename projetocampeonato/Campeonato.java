@@ -8,7 +8,6 @@ import java.util.Scanner;
 public abstract class Campeonato {
     private int qTimes;
     private int rodada;
-    private static ArrayList<ClubeCopaBrasil> clubesColocados;
 
     public Campeonato() {
         this.qTimes = contaTimes();
@@ -18,7 +17,7 @@ public abstract class Campeonato {
 
     public abstract void torneio();
 
-    public abstract void tabela();
+    public abstract void classificacao();
 
     //Conta a quantidade de clubes armazenados no clubes.csv
     private int contaTimes() {
@@ -56,14 +55,6 @@ public abstract class Campeonato {
     
     public int getRodada() {
         return rodada;
-    }
-
-    public static ArrayList<ClubeCopaBrasil> getClubesColocados() {
-        return clubesColocados;
-    }
-
-    public static void setClubesColocados(ArrayList<ClubeCopaBrasil> clubesColocados) {
-        Campeonato.clubesColocados = clubesColocados;
     }
 
     
