@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public abstract class Campeonato {
+    private static ArrayList<ClubeCopaBrasil> colocados;
     private int qTimes;
     private int rodada;
 
     public Campeonato() {
         this.qTimes = contaTimes();
+        this.setColocados(new ArrayList<ClubeCopaBrasil>());
     }
 
     public abstract void rodada(int qRodada);
@@ -56,6 +58,16 @@ public abstract class Campeonato {
     public int getRodada() {
         return rodada;
     }
+
+    public ArrayList<ClubeCopaBrasil> getColocados() {
+        return colocados;
+    }
+
+    public void setColocados(ArrayList<ClubeCopaBrasil> colocados) {
+        this.colocados = colocados;
+    }
+
+    
 
     
 

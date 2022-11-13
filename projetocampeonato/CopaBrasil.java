@@ -11,9 +11,9 @@ public class CopaBrasil extends Campeonato{
         super.setRodada(1);
     }
 
-    public void geraChave(ArrayList<Integer> numbers) {
-        /*try {
-            if(super.getClubesColocados().isEmpty()) {
+    public void geraChave() {
+        try {
+            if(super.getColocados().isEmpty()) {
                 System.out.println("Deve ser termindado o Brasileirão!!");
                 return;
             }
@@ -21,19 +21,20 @@ public class CopaBrasil extends Campeonato{
             System.out.println("Deve ser termindado o Brasileirão!!");
             return;
         }
+        ArrayList<Integer> numbers = sorteio();
         for(Integer number : numbers){
-            chave.add(super.getClubesColocados().get(number));
+            chave.add(super.getColocados().get(number));
         }
         System.out.println("Chave:");
-        tabela();*/
+        classificacao();
 
     }
 
     public ArrayList<Integer> sorteio() {
         ArrayList<Integer> numbers = new ArrayList<Integer>();
-        while(numbers.size() != super.getqTimes()) {
+        while(numbers.size() != super.getColocados().size()) {
             Random gerador = new Random();
-            int number = gerador.nextInt(super.getqTimes());
+            int number = gerador.nextInt(super.getColocados().size());
             if(!numbers.contains(number)) {
                 numbers.add(number);
             }
@@ -86,7 +87,6 @@ public class CopaBrasil extends Campeonato{
             System.out.println("Tabela ainda não organizada!!");
             return;
         }
-        System.out.println(this.chave.size());
 
         for(int k = 0; k < qRodada; k++) {
             if(this.chave.size() <= 1) {
