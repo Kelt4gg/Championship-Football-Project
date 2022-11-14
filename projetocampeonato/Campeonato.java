@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public abstract class Campeonato {
-    private static ArrayList<ClubeCopaBrasil> colocados;
-    private int qTimes;
-    private int rodada;
+    private static ArrayList<ClubeCopaBrasil> colocados; // Array que armazena clubes que passaram do brasileirão para a copa do brasil
+    private int qTimes; // Variável que armazena a quantidade de times no campeonato
+    private int rodada; // Variável que armazena a rodada em questão
 
     public Campeonato() {
-        this.qTimes = contaTimes();
+        setqTimes(contaTimes()); //Usa o metodo conta times para colocar a quantidade de times no campeonato
         this.setColocados(new ArrayList<ClubeCopaBrasil>());
     }
 
@@ -27,7 +27,7 @@ public abstract class Campeonato {
         File file = null;
         Scanner scan = null;
         int counter = 0;
-        try { // Instancia 
+        try { // Instancia o arquivo se existir e passa para o scanner para pegar o arquivoe ler
             file = new File(path);
             scan = new Scanner(file);
             scan.nextLine();
@@ -35,9 +35,9 @@ public abstract class Campeonato {
                 scan.nextLine();
                 counter++;
             }
-        } catch (IOException e) {
+        } catch (IOException e) {// se o arquivo não existir printa um erro
             System.out.println(e);
-        } finally {
+        } finally {// e finalmente fecha o scanner
             scan.close();
         }
         return counter;
@@ -64,7 +64,7 @@ public abstract class Campeonato {
     }
 
     public void setColocados(ArrayList<ClubeCopaBrasil> colocados) {
-        this.colocados = colocados;
+        Campeonato.colocados = colocados;
     }
 
     

@@ -8,7 +8,7 @@ public class ClubeBrasileirao extends Clube{
 
     public ClubeBrasileirao(String nome, int fundacao, String local, double torcida, int score) {
         super(nome, fundacao, local, torcida, score);
-        this.pontuacao = 0;
+        setPontuacao(0); // Inicia cada clube com 0 pontos
         confrontos = new ArrayList<ClubeBrasileirao>();
     }
 
