@@ -163,10 +163,10 @@ public class Brasileirao extends Campeonato{
 
     @Override
     public void torneio() { //Roda todas as as rodadas disponiveis para o basileirão acabar
-
         while(this.getRodada() != 30) {
             rodada(1);
         }
+        System.out.println("O brasileirão chegou ao fim!!");
         
     }
 

@@ -14,7 +14,7 @@ public class CopaBrasil extends Campeonato{
 
     // Cria a chave de equipes que vão se infrentar 
     public void geraChave() {
-        
+        super.setRodada(0);
         //Verifica se o array de colocados não esta vazio
         if(super.getColocados().isEmpty()) { 
             System.out.println("Deve ser termindado o Brasileirão!!");
@@ -24,10 +24,12 @@ public class CopaBrasil extends Campeonato{
         ArrayList<Integer> numbers = sorteio();
 
         //Pega o array gerado pelo sorteio e usa como indice para escolher aleatóriamente um clube e adiciona na chave
+        this.getChave().clear();
         for(Integer number : numbers){
             chave.add(super.getColocados().get(number));
         }
 
+        System.out.println("+"+"-".repeat(120)+"+");
         System.out.println("Chave:");
 
         classificacao(); // Printa a os clubes que vão se infrentar
@@ -54,13 +56,14 @@ public class CopaBrasil extends Campeonato{
     @Override
     public void classificacao() {
         if(this.chave.isEmpty()) {
-            System.out.println("Tabela ainda não organizada!!");
+            System.out.println("Chave ainda não organizada!!");
             return;
-        } else if(this.getRodada() == 0) {
+        }
+        if(this.getRodada() == 0) {
             for(int k = 0; k < this.getChave().size() / 2; k++) {
                 System.out.printf("[%s  x  %s]\n", this.getChave().get(k * 2).getNome() ,this.getChave().get(k * 2 + 1).getNome());
             }
-            System.out.println("-".repeat(120));
+            System.out.println("+"+"-".repeat(120)+"+");;
             return;
         }
         int counter = 1;
@@ -83,7 +86,7 @@ public class CopaBrasil extends Campeonato{
             counter++;
         }
         System.out.println();
-        System.out.println("-".repeat(120));
+        System.out.println("+"+"-".repeat(120)+"+");
     }
     
     public void match(ClubeCopaBrasil time1, ClubeCopaBrasil time2) {
@@ -103,7 +106,7 @@ public class CopaBrasil extends Campeonato{
     @Override
     public void rodada(int qRodada) {
         if(this.chave.isEmpty()) {
-            System.out.println("Tabela ainda não organizada!!");
+            System.out.println("Chave ainda não organizada!!");
             return;
         }
 
@@ -124,7 +127,13 @@ public class CopaBrasil extends Campeonato{
 
     @Override
     public void torneio() {
-        this.rodada(4);
+        if(this.chave.isEmpty()) {
+            System.out.println("Chave ainda não organizada!!");
+            return;
+        }
+        while(this.getRodada() != 4) {
+            rodada(1);
+        }
         return;
     }
 
