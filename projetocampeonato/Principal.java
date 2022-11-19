@@ -27,7 +27,7 @@ public class Principal{
             String choiceP = scan.next();
             switch (choiceP) {
                 case "1":
-                    String[] optionsB = {"1 - Ver Classificação", "2 - Rodar rodadas", "3 - Para rodar o torneio inteiro","4 - Reiniciar o brasileirão", "0 - Para voltar ao menu anterior"};
+                    String[] optionsB = {"1 - Cadastrar novo clube","2 - Ver Classificação", "3 - Rodar rodadas", "4 - Para rodar o torneio inteiro","5 - Reiniciar o brasileirão", "0 - Para voltar ao menu anterior"};
                     boolean exitB = false;
                     while(!exitB) {
                         menu("MENU BRASILEIRÃO", optionsB);
@@ -36,10 +36,68 @@ public class Principal{
 
                         switch (choiceB) {
                             case "1":
-                                bra.classificacao();
+                            
+                                String error = "Motivos: \n";  
+                                int valid = 0;
+
+                                System.out.print("Nome do clube: ");
+                                String nomeClube = scan.next();
+                                valid++;
+                                
+                                int fundacao = 0;
+                                try {
+                                    System.out.print("Ano de fundação do clube: ");
+                                    fundacao = Integer.parseInt(scan.next());
+                                    valid++;
+                                } catch (Exception e) {
+                                    error += "O ano de fundação deve ser um numero inteiro\n";
+                                    scan.close();
+                                    
+                                    return;
+                                }
+
+                                System.out.print("Estadio do clube: ");
+                                String estadio = scan.next();
+                                valid++;
+
+                                long torcida = 0;
+                                try {
+                                    System.out.print("Quantidade de torcedores do clube: ");
+                                    torcida = Long.parseLong(scan.next());
+                                    valid++;
+                                } catch (Exception e) {
+                                    System.out.println("A quantidade de torcedores deve ser um numero inteiro");
+                                    scan.close();
+                                    return;
+                                }
+
+                                int nota = 0;
+                                try {
+                                    System.out.print("Nota do clube de 1 a 100: ");
+                                    nota = Integer.parseInt(scan.next());
+                                    if(nota <= 0 || nota > 100) {
+                                        error += "A nota do clube deve ser entre 1 e 100\n";
+                                        valid--;
+                                    }
+                                    valid++;
+                                } catch (Exception e) {
+                                    error += "A nota do clube deve ser um numero inteiro\n";
+                                    scan.close();
+                                    return;
+                                }
+
+                                if(valid >= 4) {
+                                    bra.cadastraClube(nomeClube, fundacao, estadio, torcida, nota);
+                                } else {
+                                    System.out.printf("Não foi possivel cadastrar o clube, %s", error);
+                                }
                                 break;
                             
                             case "2":
+                                bra.classificacao();
+                                break;
+                            
+                            case "3":
                                 
                                 boolean pass = false;
                                 int rodadaB = 0;
@@ -59,10 +117,10 @@ public class Principal{
                                 }
                                 bra.rodada(rodadaB);
                                 break;
-                            case "3":
+                            case "4":
                                 bra.torneio();
                                 break;
-                            case "4":
+                            case "5":
                                 bra = new Brasileirao();
                                 break;
                             case "0":

@@ -34,7 +34,7 @@ public class Brasileirao extends Campeonato{
                 this.getClubes().add(new ClubeBrasileirao(atributosClube[0], // Nome do Clube
                                          Integer.parseInt(atributosClube[1]), // Ano de fundação do Clube
                                                           atributosClube[2], // Estadio do Clube
-                                        Double.parseDouble(atributosClube[3]), // Quantidade da torcida do Clube
+                                        Long.parseLong(atributosClube[3]), // Quantidade da torcida do Clube
                                          Integer.parseInt(atributosClube[4]))); // Pontuação do Clube
             }
         } catch (IOException e) {
@@ -42,6 +42,15 @@ public class Brasileirao extends Campeonato{
         } finally {
             scan.close();
         }
+    }
+
+    public void cadastraClube(String nomeClube, int fundacao, String estadio, long torcida, int nota) { //Cadastra um novo clube
+        if(getRodada() > 0) {
+            System.out.println("Clubes só podem ser cadastrados antes da competição começar");
+            return;
+        }
+        this.getClubesAux().add(new ClubeBrasileirao(nomeClube, fundacao, estadio, torcida, nota));
+        this.getClubes().add(new ClubeBrasileirao(nomeClube, fundacao, estadio, torcida, nota));
     }
     
     @Override
@@ -148,13 +157,13 @@ public class Brasileirao extends Campeonato{
 
     public boolean verificaRodada() { // Verifica se ainda tem rodada disponiveis a jogar, se sim, retorna true
 
-        if(this.getRodada() == 15) { // Se o número de rodadas chegar a 15, é limpo o array de confrotos de cada clube para que possam jogar de novo 
+        if(this.getRodada() == this.getClubes().size() - 1) { // Se o número de rodadas chegar a 15, é limpo o array de confrotos de cada clube para que possam jogar de novo 
             for(ClubeBrasileirao clubes : this.getClubes()) {
                 System.out.print(clubes.getNome()+": ");
                 clubes.getConfrontos().clear();
                 System.out.println();
             }
-        } else if (this.getRodada() == 30) { // Se o número de rodadas chegar a 30, acabou o brasileirão
+        } else if (this.getRodada() == this.getClubes().size() * 2 - 2) { // Se o número de rodadas chegar a 30, acabou o brasileirão
             return false;
         }
         return true;
@@ -187,7 +196,7 @@ public class Brasileirao extends Campeonato{
             String nome = clubes.getNome();
             int fundacao = clubes.getFundacao();
             String local = clubes.getLocal();
-            double torcida = clubes.getTorcida();
+            long torcida = clubes.getTorcida();
             int score = clubes.getScore();
 
             //Cria um clube, passa os atributos e adiciona

@@ -4,10 +4,10 @@ public class Clube {
     private String nome; // Variável que armazena o nome 
     private int fundacao; // Variável que armazena o ano de fundação do clube
     private String local; // Variável que armazena o nome do estádio do clube
-    private double torcida; //Variável que armazena a quantidade de torcedores do clube
+    private long torcida; //Variável que armazena a quantidade de torcedores do clube
     private int score; //Variável que armazena a avaliação do clube
 
-    public Clube(String nome, int fundacao, String local, double torcida, int score) {
+    public Clube(String nome, int fundacao, String local, long torcida, int score) {
         this.nome = nome;
         this.fundacao = fundacao;
         this.local = local;
@@ -39,11 +39,11 @@ public class Clube {
         this.local = local;
     }
     
-    public double getTorcida() {
+    public long getTorcida() {
         return torcida;
     }
     
-    public void setTorcida(double torcida) {
+    public void setTorcida(long torcida) {
         this.torcida = torcida;
     }
     

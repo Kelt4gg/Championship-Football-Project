@@ -30,7 +30,7 @@ public class OrganizacaoFutebolF {
                 String line = scan.nextLine();
                 String[] separeted = line.split(",");
                 if(numbers.contains(k)) {
-                    this.clubes.add(new Clube(separeted[0], Integer.parseInt(separeted[1]), separeted[2], Double.parseDouble(separeted[3]), Integer.parseInt(separeted[4])));
+                    this.clubes.add(new Clube(separeted[0], Integer.parseInt(separeted[1]), separeted[2], Long.parseLong(separeted[3]), Integer.parseInt(separeted[4])));
                 }
                 k++;
             }
