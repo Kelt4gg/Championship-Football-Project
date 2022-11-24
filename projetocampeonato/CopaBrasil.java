@@ -66,6 +66,12 @@ public class CopaBrasil extends Campeonato{
             System.out.println("+"+"-".repeat(120)+"+");;
             return;
         }
+
+        if(this.getChave().size() == 1) {
+            System.out.printf("A copa do brasil chegou ao fim, o %s é o vencedor da Copa do Brasil!!!\n", this.getChave().get(0).getNome());
+            return;
+        }
+
         int counter = 1;
         int espaçosInicial = 5 * (super.getRodada() * 3);
         int espaçosEntreTimesFora = 2 * (getRodada() * getRodada());

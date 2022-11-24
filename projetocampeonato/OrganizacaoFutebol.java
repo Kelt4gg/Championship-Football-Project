@@ -16,6 +16,7 @@ public class OrganizacaoFutebol {
         this.setBra(new Brasileirao());
         this.escalaClubes();
         this.getBra().setClubesAux(this.getBra().getClubes());
+        this.setCopa(new CopaBrasil());
     }
 
     public void escalaClubes() { // Pega cada time no csv e adiciona no array clubes

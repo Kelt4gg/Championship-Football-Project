@@ -30,6 +30,7 @@ public class Principal{
                 case "1": // Lista clubes do csv
                     cbf.listarClubes();
                     break;
+
                 case "2": // Cadastra novo clube
                     if(cbf.getBra().getRodada() > 0) {
                         System.out.println("Clubes só podem ser cadastrados antes da competição começar");
@@ -151,8 +152,8 @@ public class Principal{
                     break;
 
                 case "5": // Entrar no menu da Copa do Brasil
-                    copa.setColocados(bra.passarColocados());
-                    if(copa.getColocados() == null) {
+                    cbf.getCopa().setColocados(cbf.getBra().passarColocados());
+                    if(cbf.getCopa().getColocados() == null) {
                         printTitle("!!Para a copa do brasil começar, deve ter terminado o brasileirão!!");
                         break;
                     }
@@ -164,12 +165,11 @@ public class Principal{
                         String choiceC = scan.next();
                         
                         switch (choiceC) {
-                            case "1":
-                            copa.classificacao();
-                            break;
+                            case "1": // Ver classificação
+                                cbf.getCopa().classificacao();;
+                                break;
                             
-                            case "2":
-                            
+                            case "2": // Rodar rodadas
                                 boolean pass = false;
                                 int rodadaC = 0;
                                 while(!pass) {
@@ -183,18 +183,19 @@ public class Principal{
                                     } catch (Exception e) {}
                                     printTitle("!!O número de rodadas deve ser um inteiro entre 1 e 4");
                                 }
-                                copa.rodada(rodadaC);
+                                cbf.getCopa().rodada(rodadaC);
                                 break;
-                                case "3":
-                                copa.torneio();
+                            case "3": // Rodas toda a compedição
+                                cbf.getCopa().torneio();
                                 break;
-                                case "4":
-                                copa.geraChave();
+                            case "4":
+                                cbf.getCopa().geraChave();
                                 break;
                             case "0":
                                 exitC = true;
                                 break;
                             default:
+                                printTitle("!!Deve ser escolhido uma opção valida!!");
                                 break;
                             }
                     }
