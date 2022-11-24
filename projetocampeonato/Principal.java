@@ -1,9 +1,10 @@
 package projetocampeonato;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Principal{
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         //
         //bra.torneio();
         //bra.classificacao();
@@ -12,93 +13,107 @@ public class Principal{
         //cp.geraChave();
         //cp.torneio();
         
-        //
-        Scanner scan = new Scanner(System.in);
         printTitle("BOAS VINDAS AO SIMULADOR DE CAMPEONATO BRASILEIRO");
         
         boolean exitP = false;
+        Scanner scan = new Scanner(System.in);
         Brasileirao bra = new Brasileirao();
         CopaBrasil copa = new CopaBrasil();
+        OrganizacaoFutebol cbf = new OrganizacaoFutebol();
         while(!exitP) {
-            String[] optionsP = {"1 - Ir para o menu do Brasileirão", "2 - Ir para o menu da Copa do brasil", "0 - Para sair"};
+
+            String[] optionsP = {"1 - Listar Clubes","2 - Cadastrar novo clube","3 - Remover Clube","4 - Ir para o menu do Brasileirão", "5 - Ir para o menu da Copa do brasil", "0 - Para sair"};
             menu("MENU PRINCIPAL", optionsP);
             System.out.print("Escolha uma opção: ");
-
-            String choiceP = scan.next();
+            String choiceP = scan.nextLine();
             switch (choiceP) {
-                case "1":
-                    String[] optionsB = {"1 - Cadastrar novo clube","2 - Ver Classificação", "3 - Rodar rodadas", "4 - Para rodar o torneio inteiro","5 - Reiniciar o brasileirão", "0 - Para voltar ao menu anterior"};
+                case "1": // Lista clubes do csv
+                    cbf.listarClubes();
+                    break;
+                case "2": // Cadastra novo clube
+                    if(cbf.getBra().getRodada() > 0) {
+                        System.out.println("Clubes só podem ser cadastrados antes da competição começar");
+                        return;
+                    }
+                    
+                    if(cbf.getqClubes() >= 16) {
+                        System.out.println("A quantidade maxima de clubes cadastrados é 16");
+                        return;
+                    }
+                    String error = "Motivos: \n";  
+                    int valid = 0;
+
+                    System.out.print("Nome do clube: ");
+                    String nomeClube = scan.nextLine();
+                    valid++;
+                    
+                    int fundacao = 0;
+                    try {
+                        System.out.print("Ano de fundação do clube: ");
+                        fundacao = Integer.parseInt(scan.nextLine());
+                        valid++;
+                    } catch (Exception e) {
+                        error += "O ano de fundação deve ser um numero inteiro\n";
+                    }
+
+                    System.out.print("Estadio do clube: ");
+                    String estadio = scan.nextLine();
+                    valid++;
+                    
+                    long torcida = 0;
+                    try {
+                        System.out.print("Quantidade de torcedores do clube: ");
+                        torcida = Long.parseLong(scan.nextLine());
+                        valid++;
+                    } catch (Exception e) {
+                        error += "A quantidade de torcedores deve ser um numero inteiro\n";
+                    }
+
+                    int nota = 0;
+                    try {
+                        System.out.print("Nota do clube de 1 a 100: ");
+                        nota = Integer.parseInt(scan.nextLine());
+                        if(nota <= 0 || nota > 100) {
+                            error += "A nota do clube deve ser entre 1 e 100\n";
+                            valid--;
+                        }
+                        valid++;
+                    } catch (Exception e) {
+                        error += "A nota do clube deve ser um numero inteiro\n";
+                    }
+                    if(valid == 5) {
+                        cbf.cadastraClube(nomeClube,fundacao,estadio,torcida,nota);
+                        System.out.println("O clube %s foi cadastrado com sucesso");
+                    } else {
+                        System.out.println("Não foi possive cadastrar o clube %s, " +error);
+                    }
+                    break;
+                    
+                case "3": //Remover clube
+                    if(cbf.getqClubes() < 1) {
+                        printTitle("!!Não há clubes para remover!!");
+                        break;
+                    }
+                    System.out.print("Nome do clube que deseja remover: ");
+                    String nome = "";
+                    nome = scan.nextLine();
+                    cbf.removerClube(nome);
+                    break;
+                    
+                case "4": // Entrar no menu do brasileirão
+                    String[] optionsB = {"1 - Ver Classificação", "2 - Rodar rodadas", "3 - Para rodar a competição inteira","4 - Reiniciar o brasileirão", "0 - Para voltar ao menu anterior"};
                     boolean exitB = false;
                     while(!exitB) {
                         menu("MENU BRASILEIRÃO", optionsB);
                         System.out.print("Escolha uma opção: ");
                         String choiceB = scan.next();
-
+                        
                         switch (choiceB) {
-                            case "1":
-                            
-                                String error = "Motivos: \n";  
-                                int valid = 0;
-
-                                System.out.print("Nome do clube: ");
-                                String nomeClube = scan.next();
-                                valid++;
-                                
-                                int fundacao = 0;
-                                try {
-                                    System.out.print("Ano de fundação do clube: ");
-                                    fundacao = Integer.parseInt(scan.next());
-                                    valid++;
-                                } catch (Exception e) {
-                                    error += "O ano de fundação deve ser um numero inteiro\n";
-                                    scan.close();
-                                    
-                                    return;
-                                }
-
-                                System.out.print("Estadio do clube: ");
-                                String estadio = scan.next();
-                                valid++;
-
-                                long torcida = 0;
-                                try {
-                                    System.out.print("Quantidade de torcedores do clube: ");
-                                    torcida = Long.parseLong(scan.next());
-                                    valid++;
-                                } catch (Exception e) {
-                                    System.out.println("A quantidade de torcedores deve ser um numero inteiro");
-                                    scan.close();
-                                    return;
-                                }
-
-                                int nota = 0;
-                                try {
-                                    System.out.print("Nota do clube de 1 a 100: ");
-                                    nota = Integer.parseInt(scan.next());
-                                    if(nota <= 0 || nota > 100) {
-                                        error += "A nota do clube deve ser entre 1 e 100\n";
-                                        valid--;
-                                    }
-                                    valid++;
-                                } catch (Exception e) {
-                                    error += "A nota do clube deve ser um numero inteiro\n";
-                                    scan.close();
-                                    return;
-                                }
-
-                                if(valid >= 4) {
-                                    bra.cadastraClube(nomeClube, fundacao, estadio, torcida, nota);
-                                } else {
-                                    System.out.printf("Não foi possivel cadastrar o clube, %s", error);
-                                }
+                            case "1": // Ver classificação
+                                cbf.getBra().classificacao();
                                 break;
                             
-                            case "2":
-                                bra.classificacao();
-                                break;
-                            
-                            case "3":
-                                
+                            case "2": // Roda um rodada                          
                                 boolean pass = false;
                                 int rodadaB = 0;
                                 while(!pass) {
@@ -106,33 +121,36 @@ public class Principal{
                                         System.out.print("Quantas rodadas você quer: ");
                                         String rodadaAux = scan.next();
                                         rodadaB = Integer.parseInt(rodadaAux);
-                                        System.out.println("bleh"+rodadaB);
                                         if(rodadaB >= 1 && rodadaB <=30) {
-                                            pass = true;
+                                            break;
                                         }
-                                    } catch (Exception e) {
-
-                                    }
-                                    printTitle("!!O número de rodadas deve ser um inteiro entre 1 e 30");
+                                    } catch (Exception e) {}
+                                    printTitle("!!O número de rodadas deve ser um inteiro entre 1 e 30!!");
                                 }
-                                bra.rodada(rodadaB);
+                                cbf.getBra().rodada(rodadaB);
                                 break;
-                            case "4":
-                                bra.torneio();
+
+                            case "3": // Rodar competição inteira
+                                cbf.getBra().torneio();
                                 break;
-                            case "5":
-                                bra = new Brasileirao();
+
+                            case "4": // Reiniciar o brasileirão
+                                cbf.setBra(new Brasileirao());
+                                cbf.escalaClubes();
+                                cbf.getBra().setClubesAux(cbf.getBra().getClubes());
                                 break;
-                            case "0":
+
+                            case "0": // Voltar ao menu principal
                                 exitB = true;
                                 break;
                             default:
                                 printTitle("!!Deve ser escolhido uma opção valida!!");
                                 break;
-                        }
+                            }
                     }
                     break;
-                case "2":
+
+                case "5": // Entrar no menu da Copa do Brasil
                     copa.setColocados(bra.passarColocados());
                     if(copa.getColocados() == null) {
                         printTitle("!!Para a copa do brasil começar, deve ter terminado o brasileirão!!");
@@ -147,11 +165,11 @@ public class Principal{
                         
                         switch (choiceC) {
                             case "1":
-                                copa.classificacao();
-                                break;
+                            copa.classificacao();
+                            break;
                             
                             case "2":
-                                
+                            
                                 boolean pass = false;
                                 int rodadaC = 0;
                                 while(!pass) {
@@ -167,10 +185,10 @@ public class Principal{
                                 }
                                 copa.rodada(rodadaC);
                                 break;
-                            case "3":
+                                case "3":
                                 copa.torneio();
                                 break;
-                            case "4":
+                                case "4":
                                 copa.geraChave();
                                 break;
                             case "0":
@@ -178,21 +196,21 @@ public class Principal{
                                 break;
                             default:
                                 break;
-                        }
+                            }
                     }
                     break;
-                case "0":
+                case "0": // Sair do programa
                     exitP = true;
                     System.out.println("Tchau tchau");
                     break;
                 default:
                     printTitle("!!Deve ser escolhido uma opção valida!!");
                     break;
-            }
+                }
         }
         scan.close();
     }
-
+    
     public static void menu(String titulo, String[] options) {
         int espaçosIniciais = 6;
         String title = "|"+" ".repeat(10)+titulo+" ".repeat(20)+"|";

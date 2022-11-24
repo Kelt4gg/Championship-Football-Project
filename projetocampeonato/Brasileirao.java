@@ -1,10 +1,7 @@
 package projetocampeonato;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
 
 public class Brasileirao extends Campeonato{
     private ArrayList<ClubeBrasileirao> clubes; //Array que armazena as equipes que participaram do brasileirão
@@ -12,45 +9,7 @@ public class Brasileirao extends Campeonato{
     private ArrayList<ClubeBrasileirao> clubesDisponiveis; //Array que armazena os clubes que não jogaram na rodada
 
     public Brasileirao() {
-        setClubes(new ArrayList<ClubeBrasileirao>());
         super.setRodada(0);// Inicia a rodada em 0
-        this.EscalaTimes();
-        this.setClubesAux(new ArrayList<ClubeBrasileirao>(getClubes()));
-    }
-
-    private void EscalaTimes() { // Pega cada time no csv e adiciona no array clubes
-        String path = "projetocampeonato/clubes.csv";
-        File file = null;
-        Scanner scan = null;
-        try { // Faz uma verificação se o arquivo de clubes existe
-            file = new File(path);
-            scan = new Scanner(file);
-            scan.nextLine(); //Pula a primeira linha de cabeçalho
-            while(scan.hasNext()) { // Adiciona cada clube no csv dentro do array de clubes enquanto existir algum clube no csv
-                String line = scan.nextLine(); // Pega a linha do csv
-                String[] atributosClube = line.split(","); // Separa a linha do csv em virgulas e coloca dentro do array de atributos
-                
-                ;//Instancia cada time colocando cada atributo separado na matriz atributosClube
-                this.getClubes().add(new ClubeBrasileirao(atributosClube[0], // Nome do Clube
-                                         Integer.parseInt(atributosClube[1]), // Ano de fundação do Clube
-                                                          atributosClube[2], // Estadio do Clube
-                                        Long.parseLong(atributosClube[3]), // Quantidade da torcida do Clube
-                                         Integer.parseInt(atributosClube[4]))); // Pontuação do Clube
-            }
-        } catch (IOException e) {
-            System.out.println(e);
-        } finally {
-            scan.close();
-        }
-    }
-
-    public void cadastraClube(String nomeClube, int fundacao, String estadio, long torcida, int nota) { //Cadastra um novo clube
-        if(getRodada() > 0) {
-            System.out.println("Clubes só podem ser cadastrados antes da competição começar");
-            return;
-        }
-        this.getClubesAux().add(new ClubeBrasileirao(nomeClube, fundacao, estadio, torcida, nota));
-        this.getClubes().add(new ClubeBrasileirao(nomeClube, fundacao, estadio, torcida, nota));
     }
     
     @Override
@@ -62,10 +21,11 @@ public class Brasileirao extends Campeonato{
         for(ClubeBrasileirao clube : this.getClubesAux()) {
             System.out.printf("%d°%20s| %d pontos|\n",posicao++,clube.getNome(),clube.getPontuacao());
         }
-        System.out.println("-".repeat(50)); // Printa uma linha depois da exibição de cada clube
+        System.out.println('+'+"-".repeat(48)+"+"); // Printa uma linha depois da exibição de cada clube
     }
 
     public void organizaEscalacao(){ //Organiza o array de clubesAux com a maior pontuação acima, usado o array de clubesAuxiliar para não mudar a ordem de confrontos dos clubes
+        this.setClubesAux(new ArrayList<ClubeBrasileirao>(getClubes()));
         for(int k = 0; k < this.getClubesAux().size(); k++){
             for(int kk = k+1; kk < this.getClubesAux().size(); kk++){
 
@@ -79,7 +39,7 @@ public class Brasileirao extends Campeonato{
 
     public void match(ClubeBrasileirao clube1, ClubeBrasileirao clube2) { // Metodo que simula uma partida entre dois clubes
         int probabilidade = 44; // Variável probabilidade que será usada para medir a chance de um time ganahr de outro
-        probabilidade += clube1.getScore() - clube2.getScore(); //
+        probabilidade += (clube1.getScore() - clube2.getScore()) / 2; //
         //A probabilidade das partidas se baseia que cada equipe tem 45% de chance base de ganhar, 45% para o clube1 e 45% para o clube2 e 10% de chance de empate
         //Se o clube1 tem 100 de score e o clube2 tem 70, é subtraido e somado para a variável probabilidade, então a probabilidade do clube1 ganhar é 74% e do clube2 gaanhar é de 14%
 
