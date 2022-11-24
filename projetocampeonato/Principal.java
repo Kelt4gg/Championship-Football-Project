@@ -17,8 +17,6 @@ public class Principal{
         
         boolean exitP = false;
         Scanner scan = new Scanner(System.in);
-        Brasileirao bra = new Brasileirao();
-        CopaBrasil copa = new CopaBrasil();
         OrganizacaoFutebol cbf = new OrganizacaoFutebol();
         while(!exitP) {
 

@@ -1,9 +1,6 @@
 package projetocampeonato;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public abstract class Campeonato {
     private static ArrayList<ClubeCopaBrasil> colocados; // Array que armazena clubes que passaram do brasileirão para a copa do brasil
