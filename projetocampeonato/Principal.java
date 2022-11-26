@@ -5,14 +5,6 @@ import java.util.Scanner;
 
 public class Principal{
     public static void main(String[] args) throws IOException {
-        //
-        //bra.torneio();
-        //bra.classificacao();
-
-        //cp.setColocados(bra.passarColocados());
-        //cp.geraChave();
-        //cp.torneio();
-        
         printTitle("BOAS VINDAS AO SIMULADOR DE CAMPEONATO BRASILEIRO");
         
         boolean exitP = false;
@@ -20,16 +12,123 @@ public class Principal{
         OrganizacaoFutebol cbf = new OrganizacaoFutebol();
         while(!exitP) {
 
-            String[] optionsP = {"1 - Listar Clubes","2 - Cadastrar novo clube","3 - Remover Clube","4 - Ir para o menu do Brasileirão", "5 - Ir para o menu da Copa do brasil", "0 - Para sair"};
+            String[] optionsP = {"1 - Ir para o menu do Brasileirão","2 - Ir para o menu da Copa do brasil","3 - Listar Clube","4 - Cadastrar novo clube", "5 - Remover Clube", "0 - Para sair"};
             menu("MENU PRINCIPAL", optionsP);
             System.out.print("Escolha uma opção: ");
             String choiceP = scan.nextLine();
+
             switch (choiceP) {
-                case "1": // Lista clubes do csv
-                    cbf.listarClubes();
+                case "1": // Entrar no menu do brasileirão
+                    String[] optionsB = {"1 - Ver Classificação", "2 - Rodar rodadas", "3 - Para rodar a competição inteira","4 - Reiniciar o brasileirão", "0 - Para voltar ao menu anterior"};
+                    boolean exitB = false;
+                    while(!exitB) {
+                        menu("MENU BRASILEIRÃO", optionsB);
+                        System.out.print("Escolha uma opção: ");
+                        String choiceB = scan.next();
+                        
+                        switch (choiceB) {
+                            case "1": // Ver classificação
+                                cbf.getBra().classificacao();
+                                break;
+                            
+                            case "2": // Roda um rodada                          
+                                boolean pass = false;
+                                int rodadaB = 0;
+                                while(!pass) {
+                                    try {
+                                        System.out.print("Quantas rodadas você quer: ");
+                                        String rodadaAux = scan.next();
+                                        rodadaB = Integer.parseInt(rodadaAux);
+                                        if(rodadaB >= 1 && rodadaB <=30) {
+                                            break;
+                                        }
+                                    } catch (Exception e) {}
+                                    printTitle("!!O número de rodadas deve ser um inteiro entre 1 e 30!!");
+                                }
+                                cbf.getBra().rodada(rodadaB);
+                                break;
+
+                            case "3": // Rodar competição inteira
+                                cbf.getBra().torneio();
+                                break;
+
+                            case "4": // Reiniciar o brasileirão
+                                cbf.setBra(new Brasileirao());
+                                cbf.escalaClubes();
+                                cbf.getBra().setClubesAux(cbf.getBra().getClubes());
+                                break;
+
+                            case "0": // Voltar ao menu principal
+                                exitB = true;
+                                break;
+                            default:
+                                printTitle("!!Deve ser escolhido uma opção valida!!");
+                                break;
+                            }
+                    }
+                    break;
+                    
+                case "2": // Entrar no menu da Copa do Brasil
+                    cbf.getCopa().setColocados(cbf.getBra().passarColocados());
+                    if(cbf.getCopa().getColocados() == null) {
+                        printTitle("!!Para a copa do brasil começar, deve ter terminado o brasileirão!!");
+                        break;
+                    }
+                    String[] optionsC = {"1 - Ver Classificação", "2 - Rodar rodadas", "3 - Para rodar o torneio inteiro","4 - Gerar uma nova chave de clubes", "0 - Para voltar ao menu anterior"};
+                    boolean exitC = false;
+                    while(!exitC) {
+                        menu("MENU COPA DO BRASIL", optionsC);
+                        System.out.print("Escolha uma opção: ");
+                        String choiceC = scan.next();
+                        
+                        switch (choiceC) {
+                            case "1": // Ver classificação
+                                cbf.getCopa().classificacao();;
+                                break;
+                            
+                            case "2": // Rodar rodadas
+                                boolean pass = false;
+                                int rodadaC = 0;
+                                while(!pass) {
+                                    try {
+                                        System.out.print("Quantas rodadas você quer: ");
+                                        String rodadaAux = scan.next();
+                                        rodadaC = Integer.parseInt(rodadaAux);
+                                        if(rodadaC >= 1 && rodadaC <=4) {
+                                            pass = true;
+                                        }
+                                    } catch (Exception e) {}
+                                    printTitle("!!O número de rodadas deve ser um inteiro entre 1 e 4");
+                                }
+                                cbf.getCopa().rodada(rodadaC);
+                                break;
+                                
+                            case "3": // Rodas toda a compedição
+                                cbf.getCopa().torneio();
+                                break;
+
+                            case "4": // Gera uma nova chave para a copa do brasil
+                                cbf.getCopa().geraChave();
+                                break;
+
+                            case "0": // Volta ao menu anterior
+                                exitC = true;
+                                break;
+
+                            default:
+                                printTitle("!!Deve ser escolhido uma opção valida!!");
+                                break;
+                            }
+                    }
                     break;
 
-                case "2": // Cadastra novo clube
+                case "3": // Listar clubes do csv
+                    System.out.println("Digite o nome do clube que quer ver os atributos, se quiser ver de todos deixe em branco");
+                    System.out.print("Nome do clube: ");
+                    cbf.listarClubes(scan.nextLine());
+                    break;
+                    
+                case "4": // Cadastra novo clube
                     if(cbf.getBra().getRodada() > 0) {
                         System.out.println("Clubes só podem ser cadastrados antes da competição começar");
                         return;
@@ -87,117 +186,40 @@ public class Principal{
                         System.out.println("Não foi possive cadastrar o clube %s, " +error);
                     }
                     break;
-                    
-                case "3": //Remover clube
+
+                case "5": // Remover clube
                     if(cbf.getqClubes() < 1) {
                         printTitle("!!Não há clubes para remover!!");
                         break;
                     }
+
                     System.out.print("Nome do clube que deseja remover: ");
                     String nome = "";
                     nome = scan.nextLine();
-                    cbf.removerClube(nome);
+
+                    boolean found = false;
+                    for(ClubeBrasileirao clube : cbf.getBra().getClubes()) {
+                        if(clube.getNome().toUpperCase().equals(nome.toUpperCase())) {
+                            found = true;
+                        }
+                    }
+
+                    if(found) {
+                        System.out.printf("Deseja mesmo remover o clube "+nome+"? Digite 's' para sim e 'n' para não: ");
+                        String confirm = scan.nextLine();
+                        if(confirm.equals("s")) {
+                            cbf.removerClube(nome);
+                            printTitle("O clube "+nome+" foi removido");
+                        } else if(confirm.equals("n")) {
+                            printTitle("O clube "+nome+" não foi removido");
+                        } else {
+                            printTitle("Não foi possivel dar continuaidade a remoção do clube, por falha da confirmação");                        
+                        }
+                    } else {
+                        printTitle("O clube "+nome+" foi não pode ser removido, pois não foi encontrado");
+                    }
                     break;
                     
-                case "4": // Entrar no menu do brasileirão
-                    String[] optionsB = {"1 - Ver Classificação", "2 - Rodar rodadas", "3 - Para rodar a competição inteira","4 - Reiniciar o brasileirão", "0 - Para voltar ao menu anterior"};
-                    boolean exitB = false;
-                    while(!exitB) {
-                        menu("MENU BRASILEIRÃO", optionsB);
-                        System.out.print("Escolha uma opção: ");
-                        String choiceB = scan.next();
-                        
-                        switch (choiceB) {
-                            case "1": // Ver classificação
-                                cbf.getBra().classificacao();
-                                break;
-                            
-                            case "2": // Roda um rodada                          
-                                boolean pass = false;
-                                int rodadaB = 0;
-                                while(!pass) {
-                                    try {
-                                        System.out.print("Quantas rodadas você quer: ");
-                                        String rodadaAux = scan.next();
-                                        rodadaB = Integer.parseInt(rodadaAux);
-                                        if(rodadaB >= 1 && rodadaB <=30) {
-                                            break;
-                                        }
-                                    } catch (Exception e) {}
-                                    printTitle("!!O número de rodadas deve ser um inteiro entre 1 e 30!!");
-                                }
-                                cbf.getBra().rodada(rodadaB);
-                                break;
-
-                            case "3": // Rodar competição inteira
-                                cbf.getBra().torneio();
-                                break;
-
-                            case "4": // Reiniciar o brasileirão
-                                cbf.setBra(new Brasileirao());
-                                cbf.escalaClubes();
-                                cbf.getBra().setClubesAux(cbf.getBra().getClubes());
-                                break;
-
-                            case "0": // Voltar ao menu principal
-                                exitB = true;
-                                break;
-                            default:
-                                printTitle("!!Deve ser escolhido uma opção valida!!");
-                                break;
-                            }
-                    }
-                    break;
-
-                case "5": // Entrar no menu da Copa do Brasil
-                    cbf.getCopa().setColocados(cbf.getBra().passarColocados());
-                    if(cbf.getCopa().getColocados() == null) {
-                        printTitle("!!Para a copa do brasil começar, deve ter terminado o brasileirão!!");
-                        break;
-                    }
-                    String[] optionsC = {"1 - Ver Classificação", "2 - Rodar rodadas", "3 - Para rodar o torneio inteiro","4 - Gerar uma nova chave de clubes", "0 - Para voltar ao menu anterior"};
-                    boolean exitC = false;
-                    while(!exitC) {
-                        menu("MENU COPA DO BRASIL", optionsC);
-                        System.out.print("Escolha uma opção: ");
-                        String choiceC = scan.next();
-                        
-                        switch (choiceC) {
-                            case "1": // Ver classificação
-                                cbf.getCopa().classificacao();;
-                                break;
-                            
-                            case "2": // Rodar rodadas
-                                boolean pass = false;
-                                int rodadaC = 0;
-                                while(!pass) {
-                                    try {
-                                        System.out.print("Quantas rodadas você quer: ");
-                                        String rodadaAux = scan.next();
-                                        rodadaC = Integer.parseInt(rodadaAux);
-                                        if(rodadaC >= 1 && rodadaC <=4) {
-                                            pass = true;
-                                        }
-                                    } catch (Exception e) {}
-                                    printTitle("!!O número de rodadas deve ser um inteiro entre 1 e 4");
-                                }
-                                cbf.getCopa().rodada(rodadaC);
-                                break;
-                            case "3": // Rodas toda a compedição
-                                cbf.getCopa().torneio();
-                                break;
-                            case "4":
-                                cbf.getCopa().geraChave();
-                                break;
-                            case "0":
-                                exitC = true;
-                                break;
-                            default:
-                                printTitle("!!Deve ser escolhido uma opção valida!!");
-                                break;
-                            }
-                    }
-                    break;
                 case "0": // Sair do programa
                     exitP = true;
                     System.out.println("Tchau tchau");

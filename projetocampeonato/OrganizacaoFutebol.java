@@ -105,13 +105,14 @@ public class OrganizacaoFutebol {
     }
 
     public void removerClube(String nomeClube) throws IOException {
-        boolean found = false;
         if(bra.getRodada() > 0) {
-            System.out.println("Clubes só podem ser cadastrados antes da competição começar");
+            System.out.println("Clubes só podem ser removidos antes da competição começar");
             return;
         }
+
         File file = new File("projetocampeonato/clubes.csv");
         Scanner scan = new Scanner(file);
+
         ArrayList<String> alldata = new ArrayList<String>();
         while(scan.hasNextLine()) {
             alldata.add(scan.nextLine());
@@ -125,8 +126,6 @@ public class OrganizacaoFutebol {
                 if(k < alldata.size() - 1) {
                     fw.write("\n");
                 }
-            } else {
-                found = true;
             }
 
         }
@@ -134,35 +133,60 @@ public class OrganizacaoFutebol {
         fw.close();
         scan.close();
         this.escalaClubes();
-        if(found) {
-            System.out.printf("O clube %s foi removido\n", nomeClube);
-        } else {
-            System.out.printf("O clube %s não foi achado\n", nomeClube);
+    }
+
+    private void listarClube(String nomeVerifica) {
+        boolean found = false;
+        for(ClubeBrasileirao clube : this.getBra().getClubes()) {
+            if(nomeVerifica.toUpperCase().equals(clube.getNome().toUpperCase())) {
+
+                String nome = "Nome do clube: " + clube.getNome();
+                String fundacao = "Ano de fundacação: " + clube.getFundacao();
+                String estadio = "Estádio: " + clube.getLocal();
+                String torcida ="Quantidade de torcedores: "+ String.format("%,d",clube.getTorcida());
+                String score = "Classificação: "+clube.getScore();
+
+                System.out.println("+"+"-".repeat(52)+"+");
+                System.out.printf("| %s "+" ".repeat(50-nome.length())+"|\n"+
+                                  "| %s "+" ".repeat(50-fundacao.length())+"|\n"+
+                                  "| %s "+" ".repeat(50-estadio.length())+"|\n"+
+                                  "| %s "+" ".repeat(50-torcida.length())+"|\n"+
+                                  "| %s "+" ".repeat(50-score.length())+"|\n",nome,fundacao,estadio,torcida,score);
+                System.out.println("+"+"-".repeat(52)+"+");
+                found = true;
+            }
+        }
+
+        if(!found) {
+            nomeVerifica = "O clube "+nomeVerifica+" não está cadastrado";
+            System.out.println("+"+"-".repeat(51)+"+");
+            System.out.printf("| %s"+" ".repeat(50-nomeVerifica.length())+"|\n",nomeVerifica);
+            System.out.println("+"+"-".repeat(51)+"+");
         }
     }
 
-    public void listarClubes() {
+    public void listarClubes(String nomeVerifica) {
         this.escalaClubes();
+        if(!nomeVerifica.isBlank()) {
+            listarClube(nomeVerifica);
+            return;
+        }
+
         int counter = 1;
         for(ClubeBrasileirao clube : this.getBra().getClubes()) {
             String nClube = "Clube " + counter++ +":";
             String nome = "Nome do clube: " + clube.getNome();
             String fundacao = "Ano de fundacação: " + clube.getFundacao();
             String estadio = "Estádio: " + clube.getLocal();
-            String torcida ="Quantidade de torcedores: "+ String.format("%,d",clube.getTorcida());
-            String score = "Classificação: "+clube.getScore();
             System.out.println("+"+"-".repeat(52)+"+");
             System.out.printf("| %s "+" ".repeat(50-nClube.length())+"|\n"+
                               "| %s "+" ".repeat(50-nome.length())+"|\n"+
                               "| %s "+" ".repeat(50-fundacao.length())+"|\n"+
-                              "| %s "+" ".repeat(50-estadio.length())+"|\n"+
-                              "| %s "+" ".repeat(50-torcida.length())+"|\n"+
-                              "| %s "+" ".repeat(50-score.length())+"|\n", nClube,nome,fundacao,estadio,torcida,score);
+                              "| %s "+" ".repeat(50-estadio.length())+"|\n", nClube,nome,fundacao,estadio);
         }
         System.out.println("+"+"-".repeat(52)+"+");
         
     }
-
 
     public Brasileirao getBra() {
         return bra;
