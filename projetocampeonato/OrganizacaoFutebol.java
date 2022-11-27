@@ -64,6 +64,12 @@ public class OrganizacaoFutebol {
 
     private boolean maior(String nome1, String nome2, int index) {
         while(true) {
+            if(nome1.length() == index) {
+                return false;
+            } else if(nome2.length() == index) {
+                return true;
+            }
+
             if(nome1.charAt(index) > nome2.charAt(index)) {
                 return true;
             } else if(nome1.charAt(index) < nome2.charAt(index)) {
@@ -72,6 +78,10 @@ public class OrganizacaoFutebol {
                 maior(nome1,nome2,index+=1);
             }
         }
+    }
+
+    public void cadastraClube(Clube clube) throws IOException {
+        this.cadastraClube(clube.getNome(),clube.getFundacao(),clube.getLocal(),clube.getTorcida(),clube.getScore());
     }
 
     public void cadastraClube(String nomeClube, int fundacao, String estadio, long torcida, int nota) throws IOException { //Cadastra um novo clube
@@ -113,21 +123,20 @@ public class OrganizacaoFutebol {
         File file = new File("projetocampeonato/clubes.csv");
         Scanner scan = new Scanner(file);
 
-        ArrayList<String> alldata = new ArrayList<String>();
+        ArrayList<String> allData = new ArrayList<String>();
         while(scan.hasNextLine()) {
-            alldata.add(scan.nextLine());
+            allData.add(scan.nextLine());
         }
         
         FileWriter fw = new FileWriter(file);
-        for(int k = 0; k < alldata.size(); k++) {
-            String nome = alldata.get(k).split(",")[0];
+        for(int k = 0; k < allData.size(); k++) {
+            String nome = allData.get(k).split(",")[0];
             if(!nome.toUpperCase().equals(nomeClube.toUpperCase())) {
-                fw.write(alldata.get(k));
-                if(k < alldata.size() - 1) {
+                fw.write(allData.get(k));
+                if(k < allData.size() - 1) {
                     fw.write("\n");
                 }
             }
-
         }
         fw.flush();
         fw.close();
@@ -212,12 +221,4 @@ public class OrganizacaoFutebol {
         this.qClubes = qClubes;
     }
 
-    
-    
-    
-
-    
-    
 }
-
-

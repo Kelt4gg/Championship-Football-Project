@@ -12,14 +12,14 @@ public class Principal{
         OrganizacaoFutebol cbf = new OrganizacaoFutebol();
         while(!exitP) {
 
-            String[] optionsP = {"1 - Ir para o menu do Brasileirão","2 - Ir para o menu da Copa do brasil","3 - Listar Clube","4 - Cadastrar novo clube", "5 - Remover Clube", "0 - Para sair"};
+            String[] optionsP = {"1 - Menu do Brasileirão","2 - Menu da Copa do brasil","3 - Menu de configuração de clubes", "0 - Para sair"};
             menu("MENU PRINCIPAL", optionsP);
             System.out.print("Escolha uma opção: ");
             String choiceP = scan.nextLine();
 
             switch (choiceP) {
                 case "1": // Entrar no menu do brasileirão
-                    String[] optionsB = {"1 - Ver Classificação", "2 - Rodar rodadas", "3 - Para rodar a competição inteira","4 - Reiniciar o brasileirão", "0 - Para voltar ao menu anterior"};
+                    String[] optionsB = {"1 - Ver Classificação", "2 - Simula rodadas", "3 - Para simular a competição inteira","4 - Reiniciar o brasileirão", "0 - Para voltar ao menu principal"};
                     boolean exitB = false;
                     while(!exitB) {
                         menu("MENU BRASILEIRÃO", optionsB);
@@ -31,7 +31,7 @@ public class Principal{
                                 cbf.getBra().classificacao();
                                 break;
                             
-                            case "2": // Roda um rodada                          
+                            case "2": // Simula rodadas                          
                                 boolean pass = false;
                                 int rodadaB = 0;
                                 while(!pass) {
@@ -48,7 +48,7 @@ public class Principal{
                                 cbf.getBra().rodada(rodadaB);
                                 break;
 
-                            case "3": // Rodar competição inteira
+                            case "3": // Simula competição inteira
                                 cbf.getBra().torneio();
                                 break;
 
@@ -74,7 +74,8 @@ public class Principal{
                         printTitle("!!Para a copa do brasil começar, deve ter terminado o brasileirão!!");
                         break;
                     }
-                    String[] optionsC = {"1 - Ver Classificação", "2 - Rodar rodadas", "3 - Para rodar o torneio inteiro","4 - Gerar uma nova chave de clubes", "0 - Para voltar ao menu anterior"};
+                    cbf.getCopa().geraChave();
+                    String[] optionsC = {"1 - Ver Classificação", "2 - Rodar rodadas", "3 - Para rodar o torneio inteiro","4 - Gerar uma nova chave de clubes", "0 - Para voltar ao menu principal"};
                     boolean exitC = false;
                     while(!exitC) {
                         menu("MENU COPA DO BRASIL", optionsC);
@@ -122,104 +123,199 @@ public class Principal{
                     }
                     break;
 
-                case "3": // Listar clubes do csv
-                    System.out.println("Digite o nome do clube que quer ver os atributos, se quiser ver de todos deixe em branco");
-                    System.out.print("Nome do clube: ");
-                    cbf.listarClubes(scan.nextLine());
-                    break;
-                    
-                case "4": // Cadastra novo clube
-                    if(cbf.getBra().getRodada() > 0) {
-                        System.out.println("Clubes só podem ser cadastrados antes da competição começar");
-                        return;
-                    }
-                    
-                    if(cbf.getqClubes() >= 16) {
-                        System.out.println("A quantidade maxima de clubes cadastrados é 16");
-                        return;
-                    }
-                    String error = "Motivos: \n";  
-                    int valid = 0;
+                case "3": // Menu de configuração de clube
+                    boolean exitM = false;
+                    String[] optionsM = {"1 - Listar Clube","2 - Cadastrar novo clube","3 - Modificar clube","4 - Remover clube","0 - Retornar ao menu pricipal"};
+                    while(!exitM) {
+                        menu("Menu de configuração de clubes",optionsM);
+                        System.out.printf("Escolha um opção: ");
+                        String choiceM = scan.nextLine();
+                        switch (choiceM) {
+                            case "1": // Listar clube
+                                System.out.println("Digite o nome do clube que quer ver os atributos, se quiser ver de todos os ge em branco");
+                                System.out.print("Nome do clube: ");
+                                cbf.listarClubes(scan.nextLine());
+                                break;
 
-                    System.out.print("Nome do clube: ");
-                    String nomeClube = scan.nextLine();
-                    valid++;
-                    
-                    int fundacao = 0;
-                    try {
-                        System.out.print("Ano de fundação do clube: ");
-                        fundacao = Integer.parseInt(scan.nextLine());
-                        valid++;
-                    } catch (Exception e) {
-                        error += "O ano de fundação deve ser um numero inteiro\n";
-                    }
+                            case "2": // Cadastrar novo clube
+                                if(verificaRodada(cbf.getBra().getRodada())) {
+                                    System.out.println("Clubes só podem ser cadastrados antes da competição começar");
+                                    break;
+                                }
+                                if(verificaQuantidadeClubes(cbf.getqClubes())) {
+                                    System.out.println("A quantidade maxima de clubes cadastrados é 16");
+                                    break;
+                                }
+            
+                                String error = "Motivos: \n";  
+                                int valid = 0;
+            
+                                System.out.print("Nome do clube: ");
+                                String nomeClube = scan.nextLine();
+                                valid++;
+                                
+                                System.out.print("Estadio do clube: ");
+                                String estadio = scan.nextLine();
+                                valid++;
 
-                    System.out.print("Estadio do clube: ");
-                    String estadio = scan.nextLine();
-                    valid++;
-                    
-                    long torcida = 0;
-                    try {
-                        System.out.print("Quantidade de torcedores do clube: ");
-                        torcida = Long.parseLong(scan.nextLine());
-                        valid++;
-                    } catch (Exception e) {
-                        error += "A quantidade de torcedores deve ser um numero inteiro\n";
-                    }
+                                long[] variables = new long[3];
+                                String[] variableNames = {"Ano de fundação", "Quantidade de torcedores", "Nota do clube"};
+                                for(int k = 0; k < variables.length; k++) {
+                                    try {
+                                        System.out.print(variableNames[k] +": ");
+                                        variables[k] = Long.parseLong(scan.nextLine());
+                                        if(k == 2) {
+                                            if(variables[k] <= 0 || variables[k] > 100) {
+                                                error += "A nota do clube deve ser entre 1 e 100\n";
+                                                valid--;
+                                            }
+                                        }
+                                        valid++;
+                                    } catch (Exception e) {
+                                        error += variableNames[k]+ "deve ser um numero inteiro\n";
+                                    }
+                                }
 
-                    int nota = 0;
-                    try {
-                        System.out.print("Nota do clube de 1 a 100: ");
-                        nota = Integer.parseInt(scan.nextLine());
-                        if(nota <= 0 || nota > 100) {
-                            error += "A nota do clube deve ser entre 1 e 100\n";
-                            valid--;
+                                if(valid == 5) {
+                                    cbf.cadastraClube(nomeClube,(int) variables[0],estadio,variables[1],(int)variables[2]);
+                                    System.out.printf("O clube %s foi cadastrado com sucesso\n", nomeClube);
+                                } else {
+                                    System.out.println("Não foi possive cadastrar o clube, " +error);
+                                }
+                                break;
+                        
+                            case "3": // Modificar clube
+                                if(cbf.getqClubes() < 1) {
+                                    printTitle("!!Não há clubes para modificar!!");
+                                    break;
+                                }
+                                if(verificaRodada(cbf.getBra().getRodada())) {
+                                    System.out.println("Clubes só podem ser modificador antes da competição começar");
+                                    break;
+                                }
+            
+                                System.out.print("Nome do clube que deseja modificar: ");
+                                String nomeM = "";
+                                nomeM = scan.nextLine();
+                                
+                                Clube clubeNovo = null;
+                                boolean foundM = false;
+                                for(ClubeBrasileirao clube : cbf.getBra().getClubes()) {
+                                    if(clube.getNome().toUpperCase().equals(nomeM.toUpperCase())) {
+                                        clubeNovo = clube;
+                                        foundM = true;
+                                    }
+                                }
+                                
+                                long[] attributes = new long[3];
+                                attributes[0] = clubeNovo.getFundacao();
+                                attributes[1] = clubeNovo.getTorcida();
+                                attributes[2] = clubeNovo.getScore();
+                                if(foundM) {
+                                    
+                
+                                    String errorM = "Motivos: \n";  
+                                    int validM = 0;
+                                    
+                                    printTitle("Se não quiser modificar algum atributo, coloque 0");
+                                    System.out.printf("Atual nome do clube: %s\nNovo nome do clube: ",clubeNovo.getNome());
+                                    String nomeNovo = scan.nextLine();
+                                    if(!nomeNovo.equals("0")) {
+                                        clubeNovo.setNome(nomeNovo);;
+                                    }
+                                    validM++;
+                                    
+                                    System.out.printf("Atual estadio do clube: %s\nNovo estadio do clube: ", clubeNovo.getLocal());
+                                    String estadioNovo = scan.nextLine();
+                                    if(!estadioNovo.equals("0")) {
+                                        clubeNovo.setLocal(estadioNovo);
+                                    }
+                                    validM++;
+    
+                                    long[] variablesM = new long[3];
+                                    String[] variableNamesM = {"Ano de fundação", "Quantidade de torcedores", "Nota do clube"};
+                                    for(int k = 0; k < variablesM.length; k++) {
+                                        try {
+                                            System.out.printf("Atual %s do clube: %d\nNovo %s do clube: ", variableNamesM[k],attributes[k], variableNamesM[k]);
+                                            variablesM[k] = Long.parseLong(scan.nextLine());
+                                            if(k == 2) {
+                                                if(variablesM[k] < 0 || variablesM[k] > 100) {
+                                                    errorM += "A nota do clube deve ser entre 0 e 100\n";
+                                                    validM--;
+                                                }
+                                            }
+                                            validM++;
+                                        } catch (Exception e) {
+                                            errorM += variableNamesM[k]+ " deve ser um numero inteiro\n";
+                                        }
+                                    }
+                                    if(!(variablesM[0] == 0)) {
+                                        clubeNovo.setFundacao((int)variablesM[0]);
+                                    }
+                                    if(!(variablesM[1] == 0)) {
+                                        clubeNovo.setTorcida(variablesM[1]);
+                                    }
+                                    if(!(variablesM[2] == 0)) {
+                                        clubeNovo.setScore((int)variablesM[2]);
+                                    }
+    
+                                    if(validM == 5) {
+                                        cbf.removerClube(nomeNovo);
+                                        cbf.cadastraClube(clubeNovo);
+                                        System.out.printf("O clube %s foi modificado com sucesso\n", nomeNovo);
+                                    } else {
+                                        System.out.println("Não foi possive cadastrar o clube, " +errorM);
+                                    }
+                                } else {
+                                    printTitle("O clube "+nomeM+" não foi encontrado");
+                                }
+                                break;
+
+                            case "4": // remover clube
+                                if(cbf.getqClubes() < 1) {
+                                    printTitle("!!Não há clubes para remover!!");
+                                    break;
+                                }
+            
+                                System.out.print("Nome do clube que deseja remover: ");
+                                String nomeR = "";
+                                nomeR = scan.nextLine();
+            
+                                boolean foundR = false;
+                                for(ClubeBrasileirao clube : cbf.getBra().getClubes()) {
+                                    if(clube.getNome().toUpperCase().equals(nomeR.toUpperCase())) {
+                                        foundR = true;
+                                    }
+                                }
+            
+                                if(foundR) {
+                                    System.out.printf("Deseja mesmo remover o clube "+nomeR+"? Digite 's' para sim e 'n' para não: ");
+                                    String confirm = scan.nextLine();
+                                    if(confirm.equals("s")) {
+                                        cbf.removerClube(nomeR);
+                                        printTitle("O clube "+nomeR+" foi removido");
+                                    } else if(confirm.equals("n")) {
+                                        printTitle("O clube "+nomeR+" não foi removido");
+                                    } else {
+                                        printTitle("Não foi possivel dar continuaidade a remoção do clube, por falha da confirmação");                        
+                                    }
+                                } else {
+                                    printTitle("O clube "+nomeR+" não foi encontrado");
+                                }
+                                break;
+
+                            case "0": // Retornar ao menu principal
+                                exitM = true;
+                                break;
+
+                            default:
+                                printTitle("!!Deve ser escolhido uma opção valida!!");
+                                break;
                         }
-                        valid++;
-                    } catch (Exception e) {
-                        error += "A nota do clube deve ser um numero inteiro\n";
-                    }
-                    if(valid == 5) {
-                        cbf.cadastraClube(nomeClube,fundacao,estadio,torcida,nota);
-                        System.out.println("O clube %s foi cadastrado com sucesso");
-                    } else {
-                        System.out.println("Não foi possive cadastrar o clube %s, " +error);
+                        
                     }
                     break;
-
-                case "5": // Remover clube
-                    if(cbf.getqClubes() < 1) {
-                        printTitle("!!Não há clubes para remover!!");
-                        break;
-                    }
-
-                    System.out.print("Nome do clube que deseja remover: ");
-                    String nome = "";
-                    nome = scan.nextLine();
-
-                    boolean found = false;
-                    for(ClubeBrasileirao clube : cbf.getBra().getClubes()) {
-                        if(clube.getNome().toUpperCase().equals(nome.toUpperCase())) {
-                            found = true;
-                        }
-                    }
-
-                    if(found) {
-                        System.out.printf("Deseja mesmo remover o clube "+nome+"? Digite 's' para sim e 'n' para não: ");
-                        String confirm = scan.nextLine();
-                        if(confirm.equals("s")) {
-                            cbf.removerClube(nome);
-                            printTitle("O clube "+nome+" foi removido");
-                        } else if(confirm.equals("n")) {
-                            printTitle("O clube "+nome+" não foi removido");
-                        } else {
-                            printTitle("Não foi possivel dar continuaidade a remoção do clube, por falha da confirmação");                        
-                        }
-                    } else {
-                        printTitle("O clube "+nome+" foi não pode ser removido, pois não foi encontrado");
-                    }
-                    break;
-                    
+  
                 case "0": // Sair do programa
                     exitP = true;
                     System.out.println("Tchau tchau");
@@ -262,5 +358,21 @@ public class Principal{
         printDiv(line.length());
         System.out.println(line);
         printDiv(line.length());
+    }
+
+    public static boolean verificaRodada(int rodada) {
+        if(rodada > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean verificaQuantidadeClubes(int qClubes) {
+        if(qClubes >= 16) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

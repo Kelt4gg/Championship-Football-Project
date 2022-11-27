@@ -18,10 +18,15 @@ public class Brasileirao extends Campeonato{
 
         System.out.printf("Classificação da %d° rodada:\n\n", this.getRodada());
         int posicao = 1;
+        int espaços = 20;
+        System.out.println('+'+"-".repeat(48)+"+");
         for(ClubeBrasileirao clube : this.getClubesAux()) {
-            System.out.printf("%d°%20s| %d pontos|\n",posicao++,clube.getNome(),clube.getPontuacao());
+            if(posicao == 10) {
+                espaços = 19;
+            }
+            System.out.printf("%d°%"+espaços+"s| %d pontos| %d V| %d D| %d E|\n",posicao++,clube.getNome(),clube.getPontuacao(),clube.getPartidas()[0],clube.getPartidas()[1],clube.getPartidas()[2]);
         }
-        System.out.println('+'+"-".repeat(48)+"+"); // Printa uma linha depois da exibição de cada clube
+        System.out.println('+'+"-".repeat(48)+"+");
     }
 
     public void organizaEscalacao(){ //Organiza o array de clubesAux com a maior pontuação acima, usado o array de clubesAuxiliar para não mudar a ordem de confrontos dos clubes
@@ -55,18 +60,24 @@ public class Brasileirao extends Campeonato{
         //Se a probabilidade estiver em 70, se cair um número de 0 a 70, o Clube1 ganha, Se o número cair sentre 71 e 80 dá empate e se cair entre 81 e 100 o clube2 vence
         if(number <= probabilidade) {
             // Se o clube1 ganhar é adicionado 3 pontos e printado que o clube1 ganhou do clube2
-            this.getClubes().get(this.getClubes().indexOf(clube1)).setPontuacao(pontuacaoTime1 + 3); 
+            this.getClubes().get(this.getClubes().indexOf(clube1)).setPontuacao(pontuacaoTime1 + 3);
+            this.getClubes().get(this.getClubes().indexOf(clube1)).getPartidas()[0] += 1;
+            this.getClubes().get(this.getClubes().indexOf(clube2)).getPartidas()[1] += 1;
             System.out.printf("O %s ganhou do %s\n", clube1.getNome(), clube2.getNome());
 
         } else if(number > empate) {
             // Se o clube2 ganhar é adicionado 3 pontos e printado que o clube2 ganhou do clube1
             this.getClubes().get(this.getClubes().indexOf(clube2)).setPontuacao(pontuacaoTime2 + 3);
+            this.getClubes().get(this.getClubes().indexOf(clube2)).getPartidas()[0] += 1;
+            this.getClubes().get(this.getClubes().indexOf(clube1)).getPartidas()[1] += 1;
             System.out.printf("O %s ganhou do %s\n", clube2.getNome(), clube1.getNome());
 
         } else {
             // Se houver empate, é adicionado 1 ponto a cada clube e printado que o clube1 empatou com o clube2
             this.getClubes().get(this.getClubes().indexOf(clube1)).setPontuacao(pontuacaoTime1 + 1);
             this.getClubes().get(this.getClubes().indexOf(clube2)).setPontuacao(pontuacaoTime2 + 1);
+            this.getClubes().get(this.getClubes().indexOf(clube1)).getPartidas()[2] += 1;
+            this.getClubes().get(this.getClubes().indexOf(clube2)).getPartidas()[2] += 1;
             System.out.printf("O %s empatou com o %s\n", clube1.getNome(), clube2.getNome());
         }
     }
@@ -119,9 +130,7 @@ public class Brasileirao extends Campeonato{
 
         if(this.getRodada() == this.getClubes().size() - 1) { // Se o número de rodadas chegar a 15, é limpo o array de confrotos de cada clube para que possam jogar de novo 
             for(ClubeBrasileirao clubes : this.getClubes()) {
-                System.out.print(clubes.getNome()+": ");
                 clubes.getConfrontos().clear();
-                System.out.println();
             }
         } else if (this.getRodada() == this.getClubes().size() * 2 - 2) { // Se o número de rodadas chegar a 30, acabou o brasileirão
             return false;

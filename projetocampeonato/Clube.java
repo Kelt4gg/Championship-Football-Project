@@ -55,5 +55,4 @@ public class Clube {
         this.score = score;
     }
 
-    
 }

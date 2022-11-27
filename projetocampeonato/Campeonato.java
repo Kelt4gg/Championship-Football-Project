@@ -31,10 +31,5 @@ public abstract class Campeonato {
     public void setColocados(ArrayList<ClubeCopaBrasil> colocados) {
         Campeonato.colocados = colocados;
     }
-
-    
-
-    
-
-    
+   
 }

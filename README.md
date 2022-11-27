@@ -2,4 +2,4 @@
 Academic Project, Football Championship Simulation
 
 >project status: under development
->To-do list: method to modifyClube
+>To-do list: method to modifyClube, add atribute in csv wins copa do brasil?, add comments

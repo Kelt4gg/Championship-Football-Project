@@ -30,9 +30,6 @@ public class CopaBrasil extends Campeonato{
         }
 
         System.out.println("+"+"-".repeat(120)+"+");
-        System.out.println("Chave:");
-
-        classificacao(); // Printa a os clubes que vão se infrentar
 
     }
 
@@ -60,6 +57,7 @@ public class CopaBrasil extends Campeonato{
             return;
         }
         if(this.getRodada() == 0) {
+            System.out.println("Chave: ");
             for(int k = 0; k < this.getChave().size() / 2; k++) {
                 System.out.printf("[%s  x  %s]\n", this.getChave().get(k * 2).getNome() ,this.getChave().get(k * 2 + 1).getNome());
             }
@@ -97,7 +95,7 @@ public class CopaBrasil extends Campeonato{
     
     public void match(ClubeCopaBrasil time1, ClubeCopaBrasil time2) {
         int probabilidade = 49;
-        probabilidade += time1.getScore() - time2.getScore();
+        probabilidade += (time1.getScore() - time2.getScore()) / 2;
         Random randomizer = new Random();
         int number = randomizer.nextInt(100);
         if(number <= probabilidade) {
@@ -151,5 +149,4 @@ public class CopaBrasil extends Campeonato{
         this.chave = chave;
     }
     
-
 }
