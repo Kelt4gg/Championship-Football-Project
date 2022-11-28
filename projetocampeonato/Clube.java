@@ -1,11 +1,11 @@
 package projetocampeonato;
 
 public class Clube {
-    private String nome; // Variável que armazena o nome 
-    private int fundacao; // Variável que armazena o ano de fundação do clube
-    private String local; // Variável que armazena o nome do estádio do clube
-    private long torcida; //Variável que armazena a quantidade de torcedores do clube
-    private int score; //Variável que armazena a avaliação do clube
+    private String nome;
+    private int fundacao;
+    private String local;
+    private long torcida;
+    private int score;
 
     public Clube(String nome, int fundacao, String local, long torcida, int score) {
         this.nome = nome;

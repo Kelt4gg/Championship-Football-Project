@@ -4,87 +4,113 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Brasileirao extends Campeonato{
-    private ArrayList<ClubeBrasileirao> clubes; //Array que armazena as equipes que participaram do brasileirão
+    private ArrayList<ClubeBrasileirao> clubes; //Array que armazena as equipes que participarão do brasileirão
     private ArrayList<ClubeBrasileirao> clubesAux; //Array auxiliar usado para organizar e no final da competição será passado para o array colocados
-    private ArrayList<ClubeBrasileirao> clubesDisponiveis; //Array que armazena os clubes que não jogaram na rodada
+    private ArrayList<ClubeBrasileirao> clubesDisponiveis; //Array que armazena os clubes que estão disponiveis para jogar na rodada
 
     public Brasileirao() {
-        super.setRodada(0);// Inicia a rodada em 0
+        super.setRodada(0);
     }
     
+    /***********************************************************************************************
+     * Printa uma tablea com nomes, pontuação, vitorias, derrotas e empates de cada clube
+        * Ordenada pela pontuação de cada clube
+    ***********************************************************************************************/
     @Override
-    public void classificacao() { //Printa uma tabela com o nome de cada time, sua posição na tabela e no topo a rodada em questão
+    public void tabela() {
         organizaEscalacao();
 
         System.out.printf("Classificação da %d° rodada:\n\n", this.getRodada());
-        int posicao = 1;
-        int espaços = 20;
-        System.out.println('+'+"-".repeat(48)+"+");
+        int posicao = 1; //Armazena a colocação de cada clube
+        int espaços = 20; //Quantidade de espaços entre a colocação e o nome do clube
+
+        System.out.println('+'+"-".repeat(48)+"+"); // Printa uma divisoria
         for(ClubeBrasileirao clube : this.getClubesAux()) {
             if(posicao == 10) {
                 espaços = 19;
             }
             System.out.printf("%d°%"+espaços+"s| %d pontos| %d V| %d D| %d E|\n",posicao++,clube.getNome(),clube.getPontuacao(),clube.getPartidas()[0],clube.getPartidas()[1],clube.getPartidas()[2]);
         }
-        System.out.println('+'+"-".repeat(48)+"+");
+        System.out.println('+'+"-".repeat(48)+"+"); // Printa uma divisoria
     }
 
+    /***********************************************************************************************
+     * Organiza o Array de ClubesAuxiliar, ordenando pela quantidade de pontos de cada clube
+    ***********************************************************************************************/
     public void organizaEscalacao(){ //Organiza o array de clubesAux com a maior pontuação acima, usado o array de clubesAuxiliar para não mudar a ordem de confrontos dos clubes
-        this.setClubesAux(new ArrayList<ClubeBrasileirao>(getClubes()));
+        this.setClubesAux((getClubes()));
         for(int k = 0; k < this.getClubesAux().size(); k++){
             for(int kk = k+1; kk < this.getClubesAux().size(); kk++){
 
-                if(this.getClubesAux().get(k).getPontuacao() < this.getClubesAux().get(kk).getPontuacao()){ // Ordena da maior pontuação de cada clube para a menor
-                    this.getClubesAux().add(k, getClubesAux().get(kk)); // Adiciona o clube na posição nova
-                    this.getClubesAux().remove(kk+1); // Remove o clube da posição anterior
+                if(this.getClubesAux().get(k).getPontuacao() < this.getClubesAux().get(kk).getPontuacao()){ // Se a pontuação do clube N for menor que a posição do clube NN
+                    this.getClubesAux().add(k, getClubesAux().get(kk)); // Adiciona o clube N na posição do clube NN
+                    this.getClubesAux().remove(kk+1); // Remove o clube da posição N da posição anterior
                 } 
             }
         }
     }
 
-    public void match(ClubeBrasileirao clube1, ClubeBrasileirao clube2) { // Metodo que simula uma partida entre dois clubes
-        int probabilidade = 44; // Variável probabilidade que será usada para medir a chance de um time ganahr de outro
-        probabilidade += (clube1.getScore() - clube2.getScore()) / 2; //
-        //A probabilidade das partidas se baseia que cada equipe tem 45% de chance base de ganhar, 45% para o clube1 e 45% para o clube2 e 10% de chance de empate
-        //Se o clube1 tem 100 de score e o clube2 tem 70, é subtraido e somado para a variável probabilidade, então a probabilidade do clube1 ganhar é 74% e do clube2 gaanhar é de 14%
+    /***********************************************************************************************
+     * Simula uma partida entre dois clubes
+        * Cada time tem por padrão a probabilidade de 45% de chance de ganhar
+        * Tem 10% de chance de empatar
+    ***********************************************************************************************/
+    public void partida(ClubeBrasileirao clube1, ClubeBrasileirao clube2) {
+        int probabilidade = 44; //Variavel que armazena a probalidade de cada clube ganhar
+        probabilidade += (clube1.getScore() - clube2.getScore()) / 2; // Adiciona a subtração dos score dos dois clubes
 
         int empate = probabilidade + 11; // Armazena a chance de empate
 
-        Random randomizer = new Random(); // Classe que criará números aleatório 
-        int number = randomizer.nextInt(101); // É Criado um número aleatório de 0 a 100
+        Random randomificador = new Random();
+        int numero = randomificador.nextInt(101);
 
-         // Armazena a quantidade de pontos de cada clube
-        int pontuacaoTime1 = clube1.getPontuacao();
-        int pontuacaoTime2 = clube2.getPontuacao();
 
-        //Se a probabilidade estiver em 70, se cair um número de 0 a 70, o Clube1 ganha, Se o número cair sentre 71 e 80 dá empate e se cair entre 81 e 100 o clube2 vence
-        if(number <= probabilidade) {
-            // Se o clube1 ganhar é adicionado 3 pontos e printado que o clube1 ganhou do clube2
-            this.getClubes().get(this.getClubes().indexOf(clube1)).setPontuacao(pontuacaoTime1 + 3);
-            this.getClubes().get(this.getClubes().indexOf(clube1)).getPartidas()[0] += 1;
-            this.getClubes().get(this.getClubes().indexOf(clube2)).getPartidas()[1] += 1;
-            System.out.printf("O %s ganhou do %s\n", clube1.getNome(), clube2.getNome());
+        if(numero <= probabilidade) { // Se o valor de numero aleoatorio for menor ou igual o valor da probabilidade, o clube1 vence
+            this.adicionaPontuacao(clube1, clube2, 1);
 
-        } else if(number > empate) {
-            // Se o clube2 ganhar é adicionado 3 pontos e printado que o clube2 ganhou do clube1
-            this.getClubes().get(this.getClubes().indexOf(clube2)).setPontuacao(pontuacaoTime2 + 3);
-            this.getClubes().get(this.getClubes().indexOf(clube2)).getPartidas()[0] += 1;
-            this.getClubes().get(this.getClubes().indexOf(clube1)).getPartidas()[1] += 1;
-            System.out.printf("O %s ganhou do %s\n", clube2.getNome(), clube1.getNome());
+        } else if(numero > empate) { // Se o valor de numero aleoatorio for maior que o valor de empate, o clube2 vence
+            this.adicionaPontuacao(clube2, clube1, 1);
 
         } else {
             // Se houver empate, é adicionado 1 ponto a cada clube e printado que o clube1 empatou com o clube2
-            this.getClubes().get(this.getClubes().indexOf(clube1)).setPontuacao(pontuacaoTime1 + 1);
-            this.getClubes().get(this.getClubes().indexOf(clube2)).setPontuacao(pontuacaoTime2 + 1);
-            this.getClubes().get(this.getClubes().indexOf(clube1)).getPartidas()[2] += 1;
-            this.getClubes().get(this.getClubes().indexOf(clube2)).getPartidas()[2] += 1;
-            System.out.printf("O %s empatou com o %s\n", clube1.getNome(), clube2.getNome());
+            this.adicionaPontuacao(clube1, clube2, 2);
         }
     }
 
+    /***********************************************************************************************
+     * Atualiza a quantidade de pontos, vitorias, derrotas e empates do clube1 e clube2
+    ***********************************************************************************************/
+    private void adicionaPontuacao(ClubeBrasileirao clube1, ClubeBrasileirao clube2, int option) {
+        // Armazena a quantidade de pontos de cada clube
+        int pontuacaoClube1 = clube1.getPontuacao();
+        int pontuacaoClube2 = clube2.getPontuacao();
+
+        switch (option) {
+            case 1: // Se option for 1, o clube1 ganhou do clube2
+                this.getClubes().get(this.getClubes().indexOf(clube1)).setPontuacao(pontuacaoClube1 + 3); //Adjciona 3 pontos ao clube1
+                this.getClubes().get(this.getClubes().indexOf(clube1)).getPartidas()[0] += 1; //Adiciona uma vitória ao clube1
+                this.getClubes().get(this.getClubes().indexOf(clube2)).getPartidas()[1] += 1; //Adiciona uma derrota ao clube2
+                System.out.printf("O %s ganhou do %s\n", clube1.getNome(), clube2.getNome());
+                break;
+            case 2: //Se option for 2, houve empate entre o clube1 e o clube2
+                this.getClubes().get(this.getClubes().indexOf(clube1)).setPontuacao(pontuacaoClube1 + 1);
+                this.getClubes().get(this.getClubes().indexOf(clube2)).setPontuacao(pontuacaoClube2 + 1);
+                this.getClubes().get(this.getClubes().indexOf(clube1)).getPartidas()[2] += 1; //Adiciona um empate ao clube1
+                this.getClubes().get(this.getClubes().indexOf(clube2)).getPartidas()[2] += 1; //Adiciona um empate ao clube2
+                System.out.printf("O %s Empatou com %s\n", clube1.getNome(), clube2.getNome());
+                break;
+            default:
+                break;
+        }
+    }
+
+    /***********************************************************************************************
+     * Verifica se o clube1 já enfrentou o clube2
+        * Retorna um clube que o clube1 não enfrentou ainda
+    ***********************************************************************************************/
     public ClubeBrasileirao verificaDisponiveis(ClubeBrasileirao clube1, ClubeBrasileirao clube2) { // Verifica se um clube pode jogar com o outro
-        //Verifica se o clube1 e o clube2 são iguais e se o clube1 já confrontou o clube2
-        //Se já enfrentou ou se são iguais é procurado o proximo clube da tabela e verifica novamente até que ache um clube disponivel
+        
+        //Enquanto o clube1 e o clube 2 forem iguais ou já tiverem se enfrentado, procura um novo clube para enfrentar o clube1
         while(clube1 == clube2 || this.getClubes().get(this.getClubes().indexOf(clube1)).getConfrontos().contains(clube2)) {
 
             clube2 = this.getClubesDisponiveis().get(getClubesDisponiveis().indexOf(clube2) + 1);
@@ -93,43 +119,52 @@ public class Brasileirao extends Campeonato{
         return clube2;
     }
 
+    /***********************************************************************************************
+     * Simula uma quantidade N de rodadas
+        * Cada rodada tendo uma quantidade N de partidas
+     * Parâmetros:
+     * Recebe um número entre 1 e 30 que será a quantidade de rodadas desejadas a serem simuladas
+    ***********************************************************************************************/
     @Override
-    public void rodada(int qRodada) { // Simula a quantidade de N rodadas, em uma rodada cada equipe joga contra o outro
+    public void rodada(int qRodada) {
         for(int k = 0; k < qRodada; k++) {
 
-            this.setClubesDisponiveis(new ArrayList<ClubeBrasileirao>(this.getClubes())); // Coloca os times disponiveis a cada rodada
+            this.setClubesDisponiveis(new ArrayList<ClubeBrasileirao>(this.getClubes())); // Re-atualiza os clubes disponiveis a cada rodada
 
-            if(!verificaRodada()) { // Se verificaRodada retornar false, é por que o todas as equipes já fizeram seus jogos e o brasileirão chegou ao fim
+            if(!verificaRodada()) {
                 System.out.println("O brasileirão chegou ao fim!!");
                 this.printColocados();
                 return;
             }
 
-            this.setRodada(this.getRodada()+1); //Aumenta 1 em rodada a cada iteração
-            System.out.printf("Na %d° rodada:\n\n", this.getRodada());//Printa a rodada em questão
+            this.setRodada(this.getRodada()+1);
+            System.out.printf("Na %d° rodada:\n\n", this.getRodada());
 
             while(!this.getClubesDisponiveis().isEmpty()) { //Enquanto houver clubes disponiveis no array, o loop continua iterando
-                ClubeBrasileirao clube1 = this.getClubesDisponiveis().get(0); //Pega o primeiro clube da tabela
-                ClubeBrasileirao clube2 = this.getClubesDisponiveis().get(1); //Pega o segundo clube da tabela
+                ClubeBrasileirao clube1 = this.getClubesDisponiveis().get(0); //Pega o clube do index 0 de clubesDisponiveis
+                ClubeBrasileirao clube2 = this.getClubesDisponiveis().get(1); //Pega o clube do index 1 de clubesDisponiveis
 
-                clube2 = verificaDisponiveis(clube1, clube2); //Verifica se os clubes são disponiveis a jogar
+                clube2 = verificaDisponiveis(clube1, clube2);
                 
-                //Remove o clube1 e o clube2 do array de ClubesDisponiveis para jogar esta rodada
+                //Remove o clube1 e o clube2 do array de ClubesDisponiveis
                 this.getClubesDisponiveis().remove(getClubes().get(this.getClubes().indexOf(clube1))); 
                 this.getClubesDisponiveis().remove(getClubes().get(this.getClubes().indexOf(clube2)));
 
-                match(clube1, clube2); // Roda uma partida entre o clube1 e o clube2
+                this.partida(clube1, clube2); // Roda uma partida entre o clube1 e o clube2
 
                 this.getClubes().get(getClubes().indexOf(clube1)).setConfrontos(clube2); //Adiciona ao array de confrontos do clube1 o clube2, para que não possam jogar novamente
                 this.getClubes().get(getClubes().indexOf(clube2)).setConfrontos(clube1); //Adiciona ao array de confrontos do clube2 o clube1, para que não possam jogar novamente
             }
-            System.out.println("-".repeat(50)); //Printa uma divisoria de linhas
+            System.out.println("-".repeat(50)); //Printa uma divisoria
         }
     }
 
-    public boolean verificaRodada() { // Verifica se ainda tem rodada disponiveis a jogar, se sim, retorna true
+    /***********************************************************************************************
+     *  // Verifica se ainda tem rodadas disponiveis a jogar, se sim, retorna true
+    ***********************************************************************************************/
+    public boolean verificaRodada() {
 
-        if(this.getRodada() == this.getClubes().size() - 1) { // Se o número de rodadas chegar a 15, é limpo o array de confrotos de cada clube para que possam jogar de novo 
+        if(this.getRodada() == this.getClubes().size() - 1) { // Se o número de rodadas chegar a 15,array de confrotos de cada clube é limpo para que possam jogar de novo 
             for(ClubeBrasileirao clubes : this.getClubes()) {
                 clubes.getConfrontos().clear();
             }
@@ -139,7 +174,10 @@ public class Brasileirao extends Campeonato{
         return true;
     } 
 
-
+    /***********************************************************************************************
+     * Simula o torneio inteiro do começo ao fim
+        * Se o brasileirão chegou ao fim, printa uma frase e os colocados que passaram para a copa do brasil
+    ***********************************************************************************************/
     @Override
     public void torneio() { //Roda todas as as rodadas disponiveis para o basileirão acabar
         while(this.getRodada() != 30) {
@@ -150,34 +188,26 @@ public class Brasileirao extends Campeonato{
         
     }
 
-    public ArrayList<Clube> passarColocados() { // Retorna o array 8 clubes que se colocaram para jogar na copa do brasil
-
-        if(this.getRodada() < 30) { // Só retorn o array de clubes quando o brasileirão acabar
+    /***********************************************************************************************
+     * Retorna o array 8 clubes que ficaram nas primeiras 8 posições da tabela
+    ***********************************************************************************************/
+    public ArrayList<Clube> passarColocados() { 
+        this.organizaEscalacao();
+        if(this.getRodada() < 30) { // Só retorna o array de clubes quando o brasileirão acabar
             return null;
         }
 
         ArrayList<Clube> aux = new ArrayList<Clube>(); //Inicia um array auxiliar para retornar o array de clubes que passaram
 
-        int counter = 0;
-        for(ClubeBrasileirao clubes: this.getClubesAux()) { // Pega as primeiras 8 equipes do array de clubesAux
-            if(counter == 8) {
-                break;
-            }
-            //Armazena os atributos do clube
-            String nome = clubes.getNome();
-            int fundacao = clubes.getFundacao();
-            String local = clubes.getLocal();
-            long torcida = clubes.getTorcida();
-            int score = clubes.getScore();
-
-            //Cria um clube, passa os atributos e adiciona
-            Clube clubeCB = new Clube(nome,fundacao,local,torcida,score);
-            aux.add(clubeCB);
-            counter++;
+        for(int k = 0; k < this.getClubesAux().size() / 2; k++) {
+            aux.add(this.getClubesAux().get(k));
         }
         return aux;
     }
 
+    /***********************************************************************************************
+     * Printa o nome dos N clubes que passaram para a copa do brasil em uma tabela
+    ***********************************************************************************************/
     private void printColocados() {
         System.out.println("Clubes que vão para a Copa do Brasil: ");
         System.out.println("+"+"-".repeat(15)+"+");

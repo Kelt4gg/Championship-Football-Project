@@ -9,30 +9,36 @@ public class Principal{
         printTitle("BOAS VINDAS AO SIMULADOR DE CAMPEONATO BRASILEIRO");
         Principal p = new Principal();
         
-        boolean exitP = false;
+        boolean saidaP = false;
         OrganizacaoFutebol cbf = new OrganizacaoFutebol();
-        while(!exitP) {
+        while(!saidaP) {
 
-            String[] optionsP = {"1 - Menu do Brasileirão","2 - Menu da Copa do brasil","3 - Menu de configuração de clubes", "0 - Para sair"};
+            String[] optionsP = {"1 - Menu do Brasileirão",
+                                 "2 - Menu da Copa do brasil",
+                                 "3 - Menu de configuração de clubes",
+                                 "0 - Para sair"};
             menu("MENU PRINCIPAL", optionsP);
             System.out.print("Escolha uma opção: ");
 
             switch (p.entrada()) {
                 case "1": // Entrar no menu do brasileirão
-                    cbf.escalaClubes();
                     if(cbf.getqClubes() != 16) {
                         printTitle("Deve ter pelo menos 16 clubes para iniciar o brasileirão");
                         break;
                     }
-                    String[] optionsB = {"1 - Ver Classificação", "2 - Simular rodadas", "3 - Simular a competição inteira","4 - Reiniciar o brasileirão", "0 - Para voltar ao menu principal"};
-                    boolean exitB = false;
-                    while(!exitB) {
+                    String[] optionsB = {"1 - Ver Classificação", 
+                                         "2 - Simular rodadas", 
+                                         "3 - Simular a competição inteira",
+                                         "4 - Reiniciar o brasileirão", 
+                                         "0 - Para voltar ao menu principal"};
+                    boolean saidaB = false;
+                    while(!saidaB) {
                         menu("MENU BRASILEIRÃO", optionsB);
                         System.out.print("Escolha uma opção: ");
                         
                         switch (p.entrada()) {
                             case "1": // Ver classificação
-                                cbf.getBra().classificacao();
+                                cbf.getBra().tabela();
                                 break;
                             
                             case "2": // Simula rodadas                          
@@ -58,11 +64,10 @@ public class Principal{
                             case "4": // Reiniciar o brasileirão
                                 cbf.setBra(new Brasileirao());
                                 cbf.escalaClubes();
-                                cbf.getBra().setClubesAux(cbf.getBra().getClubes());
                                 break;
 
                             case "0": // Voltar ao menu principal
-                                exitB = true;
+                                saidaB = true;
                                 break;
                             default:
                                 printTitle("!!Deve ser escolhido uma opção valida!!");
@@ -79,15 +84,19 @@ public class Principal{
                         printTitle("!!Para a copa do brasil começar, deve ter terminado o brasileirão!!");
                         break;
                     }
-                    String[] optionsC = {"1 - Ver Classificação", "2 - Simular rodadas", "3 - Simualar a competição inteira","4 - Gerar uma nova chave de clubes", "0 - Para voltar ao menu principal"};
-                    boolean exitC = false;
-                    while(!exitC) {
+                    String[] optionsC = {"1 - Ver Classificação",
+                                         "2 - Simular rodadas",
+                                         "3 - Simualar a competição inteira",
+                                         "4 - Gerar uma nova chave de clubes",
+                                         "0 - Para voltar ao menu principal"};
+                    boolean saidaC = false;
+                    while(!saidaC) {
                         menu("MENU COPA DO BRASIL", optionsC);
                         System.out.print("Escolha uma opção: ");
                         
                         switch (p.entrada()) {
                             case "1": // Ver classificação
-                                cbf.getCopa().classificacao();;
+                                cbf.getCopa().tabela();;
                                 break;
                             
                             case "2": // Rodar rodadas
@@ -115,7 +124,7 @@ public class Principal{
                                 break;
 
                             case "0": // Volta ao menu anterior
-                                exitC = true;
+                                saidaC = true;
                                 break;
 
                             default:
@@ -126,12 +135,17 @@ public class Principal{
                     break;
 
                 case "3": // Menu de configuração de clube
-                    boolean exitM = false;
-                    String[] optionsM = {"1 - Listar Clube","2 - Cadastrar novo clube","3 - Modificar clube","4 - Remover clube","0 - Retornar ao menu pricipal"};
-                    while(!exitM) {
+                    boolean saidaM = false;
+                    String[] optionsM = {"1 - Listar Clube",
+                                         "2 - Cadastrar novo clube",
+                                         "3 - Modificar clube",
+                                         "4 - Remover clube",
+                                         "0 - Retornar ao menu pricipal"};
+                    while(!saidaM) {
                         menu("Menu de configuração de clubes",optionsM);
                         System.out.printf("Escolha um opção: ");
                         switch (p.entrada()) {
+
                             case "1": // Listar clube
                                 System.out.println("Digite o nome do clube que quer ver os atributos\n!Se quiser ver de todos os clubes, deixe em branco!");
                                 System.out.print("Nome do clube: ");
@@ -180,23 +194,27 @@ public class Principal{
             
                                 if(cbf.clubeCadastrado(nome4)) {
                                     System.out.printf("Deseja mesmo remover o clube "+nome4+"? Digite 's' para sim e 'n' para não: ");
-                                    String confirm = p.entrada();
-                                    if(confirm.equals("s")) {
+                                    String confirmacao = p.entrada(); // Armazena a confirmação da remoção do clube
+
+                                    if(confirmacao.equals("s")) {
                                         cbf.removerClube(nome4);
                                         printTitle("O clube "+nome4+" foi removido");
-                                    } else if(confirm.equals("n")) {
+
+                                    } else if(confirmacao.equals("n")) {
                                         printTitle("O clube "+nome4+" não foi removido");
                                     System.out.printf("Deseja mesmo remover o clube "+nome4+"? Digite 's' para sim e 'n' para não: ");
+
                                     } else {
-                                        printTitle("Não foi possivel dar continuaidade a remoção do clube, por falha da confirmação");                        
+                                        printTitle("Não foi possivel dar continuidade a remoção do clube, por falha da confirmação");                        
                                     }
                                 } else {
                                     printTitle("O clube "+nome4+" não foi encontrado");
+
                                 }
                                 break;
 
                             case "0": // Retornar ao menu principal
-                                exitM = true;
+                                saidaM = true;
                                 break;
 
                             default:
@@ -208,7 +226,7 @@ public class Principal{
                     break;
   
                 case "0": // Sair do programa
-                    exitP = true;
+                    saidaP = true;
                     System.out.println("Tchau tchau");
                     break;
                 default:
@@ -218,9 +236,15 @@ public class Principal{
         }
     }
     
+
+    /***********************************************************************************************
+     * Printa um menu com um titulo e N opções
+    ***********************************************************************************************/
     public static void menu(String titulo, String[] options) {
         int espaçosIniciais = 6;
+
         String title = "|"+" ".repeat(10)+titulo+" ".repeat(20)+"|";
+
         int length = title.length();
         printDiv(length);
         System.out.println(title);
@@ -236,21 +260,27 @@ public class Principal{
         
     }
 
+    /***********************************************************************************************
+     * Printa uma divisoria
+    ***********************************************************************************************/
     public static void printDiv(int length) {
         System.out.println("+"+"-".repeat(length - 2)+"+");
     }
-    public static void printOption(String line) {
-        System.out.println();
+
+    /***********************************************************************************************
+     * Printa um titulo com divisorias e uma frase no meio
+    ***********************************************************************************************/
+    public static void printTitle(String frase) {
+        frase = "|"+" ".repeat(6)+frase+" ".repeat(((int) (frase.length() * 0.3)))+"|";
+        printDiv(frase.length());
+        System.out.println(frase);
+        printDiv(frase.length());
     }
 
-    public static void printTitle(String line) {
-        line = "|"+" ".repeat(6)+line+" ".repeat(((int) (line.length() * 0.3)))+"|";
-        printDiv(line.length());
-        System.out.println(line);
-        printDiv(line.length());
-    }
 
-
+    /***********************************************************************************************
+     * Recebe uma entrada do usuário
+    ***********************************************************************************************/
     public String entrada() {
         Scanner in = this.getScan();
         return in.nextLine();
