@@ -3,11 +3,11 @@ package projetocampeonato;
 import java.util.ArrayList;
 
 public abstract class Campeonato {
-    private static ArrayList<ClubeCopaBrasil> colocados; // Array que armazena clubes que passaram do brasileirão para a copa do brasil
+    private static ArrayList<Clube> colocados; // Array que armazena clubes que passaram do brasileirão para a copa do brasil
     private int rodada; // Variável que armazena a rodada em questão
 
     public Campeonato() {
-        this.setColocados(new ArrayList<ClubeCopaBrasil>());
+        this.setColocados(new ArrayList<Clube>());
     }
 
     public abstract void rodada(int qRodada);
@@ -24,11 +24,11 @@ public abstract class Campeonato {
         return rodada;
     }
 
-    public ArrayList<ClubeCopaBrasil> getColocados() {
+    public ArrayList<Clube> getColocados() {
         return colocados;
     }
 
-    public void setColocados(ArrayList<ClubeCopaBrasil> colocados) {
+    public void setColocados(ArrayList<Clube> colocados) {
         Campeonato.colocados = colocados;
     }
    

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class CopaBrasil extends Campeonato{
-    private ArrayList<ClubeCopaBrasil> chave; //Array que armazenará os times que jogaram a copa do brasil
+    private ArrayList<Clube> chave; //Array que armazenará os times que jogaram a copa do brasil
 
     public CopaBrasil() {
 
-        this.chave = new ArrayList<ClubeCopaBrasil>();
+        this.chave = new ArrayList<Clube>();
         super.setRodada(0);
     }
 
@@ -93,7 +93,7 @@ public class CopaBrasil extends Campeonato{
         System.out.println("+"+"-".repeat(120)+"+");
     }
     
-    public void match(ClubeCopaBrasil time1, ClubeCopaBrasil time2) {
+    public void match(Clube time1, Clube time2) {
         int probabilidade = 49;
         probabilidade += (time1.getScore() - time2.getScore()) / 2;
         Random randomizer = new Random();
@@ -123,7 +123,7 @@ public class CopaBrasil extends Campeonato{
             this.classificacao();
             System.out.printf("Na %d° rodada:\n", super.getRodada());
             for(int kk = this.chave.size()/2-1; kk >= 0; kk--) {
-                match(this.chave.get(kk*2), this.chave.get(kk*2+1));
+                this.match(this.chave.get(kk*2), this.chave.get(kk*2+1));
             }
             System.out.println("-".repeat(120));
         }
@@ -141,11 +141,11 @@ public class CopaBrasil extends Campeonato{
         return;
     }
 
-    public ArrayList<ClubeCopaBrasil> getChave() {
+    public ArrayList<Clube> getChave() {
         return chave;
     }
 
-    public void setChave(ArrayList<ClubeCopaBrasil> chave) {
+    public void setChave(ArrayList<Clube> chave) {
         this.chave = chave;
     }
     

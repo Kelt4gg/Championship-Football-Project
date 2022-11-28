@@ -52,7 +52,7 @@ public class OrganizacaoFutebol {
     public ArrayList<ClubeBrasileirao> organizaClubes(ArrayList<ClubeBrasileirao> clubes) {
         for(int k = 0; k < clubes.size(); k++) {
             for(int kk = k+1; kk< clubes.size(); kk++) {
-                if(maior(clubes.get(k).getNome().toUpperCase(), clubes.get(kk).getNome().toUpperCase(), 0)) {
+                if(ordemAlfabetica(clubes.get(k).getNome().toUpperCase(), clubes.get(kk).getNome().toUpperCase(), 0)) {
                     ClubeBrasileirao aux = clubes.get(k);
                     clubes.set(k, clubes.get(kk));
                     clubes.set(kk, aux);
@@ -62,7 +62,7 @@ public class OrganizacaoFutebol {
         return clubes;
     }
 
-    private boolean maior(String nome1, String nome2, int index) {
+    private boolean ordemAlfabetica(String nome1, String nome2, int index) {
         while(true) {
             if(nome1.length() == index) {
                 return false;
@@ -75,16 +75,73 @@ public class OrganizacaoFutebol {
             } else if(nome1.charAt(index) < nome2.charAt(index)) {
                 return false;
             } else {
-                maior(nome1,nome2,index+=1);
+                ordemAlfabetica(nome1,nome2,index+=1);
             }
         }
     }
 
-    public void cadastraClube(Clube clube) throws IOException {
-        this.cadastraClube(clube.getNome(),clube.getFundacao(),clube.getLocal(),clube.getTorcida(),clube.getScore());
+    private Clube entradaDadosClube() {
+        Principal p = new Principal();
+        String error = "Motivos: \n";  
+        int valid = 0;
+
+        System.out.print("Nome do clube: ");
+        String nomeClube = p.entrada();
+        valid++;
+        
+        System.out.print("Estadio do clube: ");
+        String estadio = p.entrada();
+        valid++;
+
+        long[] attributes = new long[3];
+        String[] attributesNames = {"Ano de fundação", "Quantidade de torcedores", "Nota do clube"};
+        for(int k = 0; k < attributes.length; k++) {
+            try {
+                System.out.print(attributesNames[k] +": ");
+                attributes[k] = Long.parseLong(p.entrada());
+                if(k == 2) {
+                    if(attributes[k] == -1) {
+                        attributes[k] = 1;
+                    }
+                    else if(attributes[k] < 1|| attributes[k] > 100) {
+                        error += "A nota do clube deve ser entre 1 e 100\n";
+                        valid--;
+                    }
+                }
+                valid++;
+            } catch (Exception e) {
+                error += attributesNames[k]+ " deve ser um numero inteiro\n";
+            }
+        }
+
+        if(valid != 5) {
+            System.out.println("Não foi possivel cadastrar o clube "+nomeClube+" ," + error);
+            return null;
+        } else {
+            return new Clube(nomeClube,(int)attributes[0], estadio, (int)attributes[1], (int)attributes[2]);
+        }
+
     }
 
-    public void cadastraClube(String nomeClube, int fundacao, String estadio, long torcida, int nota) throws IOException { //Cadastra um novo clube
+    public void cadastraClubes(Clube clube) throws IOException {
+        this.escalaClubes();
+
+        Clube novoClube = null;
+        if(clube == null) {
+            novoClube = this.entradaDadosClube();
+        } else {
+            novoClube = clube;
+        }
+
+        if(novoClube == null) {
+            return;
+        }
+
+        if(clubeCadastrado(novoClube.getNome())) {
+            System.out.printf("O clube %s já está cadastrado", novoClube.getNome());
+            return;
+        }
+  
         File file = new File("projetocampeonato/clubes.csv");
         Scanner scan = new Scanner(file);
         ArrayList<String> alldata = new ArrayList<String>();
@@ -92,26 +149,64 @@ public class OrganizacaoFutebol {
             alldata.add(scan.nextLine());
         }
 
-        String novoClube = nomeClube+","+fundacao+","+estadio+","+torcida+","+nota;
-        
-        boolean exist = false;
         FileWriter fw = new FileWriter(file);
         for(String line : alldata) {
-            if(line.split(",")[0] == nomeClube) {
-                exist = true;
-            }
+
             fw.write(line+"\n");
         }
-        if(!exist) {
-            fw.write(novoClube);
-        } else {
-            System.out.printf("O clube %s já está cadastrado", nomeClube);
-        }
+        String line = String.format("%s,%d,%s,%d,%d",novoClube.getNome(), novoClube.getFundacao(), novoClube.getLocal(),novoClube.getTorcida(), novoClube.getScore());
+        fw.write(line);
+        System.out.println("O clube "+novoClube.getNome()+" foi cadastrado com sucesso");
+
+
         fw.flush();
         fw.close();
         scan.close();
         this.escalaClubes();
+    }
+
+    public void modificaClube(String nomeClube) throws IOException {
+        System.out.println("Atributos atuais do clube:");
+        this.listarClube(nomeClube);
+        System.out.println("Atributos que não queira modificar, coloque -1");
+
+        Clube novoClube = this.entradaDadosClube();
+        if(novoClube == null) {
+            return;
+        }
+
+        Clube atualClube = null;
+        for(ClubeBrasileirao clube : this.getBra().getClubes()) {
+            if(clube.getNome().toUpperCase().equals(nomeClube.toUpperCase())) {
+                atualClube = clube;
+            }
+        }
+
+        if(novoClube.getNome().equals("-1")) {
+            novoClube.setNome(atualClube.getNome());
+        }
+
+        if(novoClube.getFundacao() == -1) {
+            novoClube.setFundacao(atualClube.getFundacao());
+        }
         
+        if(novoClube.getLocal().equals("-1")) {
+            novoClube.setLocal(atualClube.getLocal());
+        }
+
+        if(novoClube.getTorcida() == -1) {
+            novoClube.setTorcida(atualClube.getTorcida());
+        }
+
+        if(novoClube.getScore() == -1) {
+            novoClube.setScore(atualClube.getScore());
+        }
+        
+
+        this.removerClube(nomeClube);
+        this.cadastraClubes(novoClube);
+        System.out.println("Clube apos mudanças:");
+        this.listarClube(novoClube.getNome());
     }
 
     public void removerClube(String nomeClube) throws IOException {
@@ -145,7 +240,10 @@ public class OrganizacaoFutebol {
     }
 
     private void listarClube(String nomeVerifica) {
-        boolean found = false;
+        if(!this.clubeCadastrado(nomeVerifica)) {
+            System.out.println("Clube não cadastrado");
+            return;
+        }
         for(ClubeBrasileirao clube : this.getBra().getClubes()) {
             if(nomeVerifica.toUpperCase().equals(clube.getNome().toUpperCase())) {
 
@@ -162,20 +260,11 @@ public class OrganizacaoFutebol {
                                   "| %s "+" ".repeat(50-torcida.length())+"|\n"+
                                   "| %s "+" ".repeat(50-score.length())+"|\n",nome,fundacao,estadio,torcida,score);
                 System.out.println("+"+"-".repeat(52)+"+");
-                found = true;
             }
-        }
-
-        if(!found) {
-            nomeVerifica = "O clube "+nomeVerifica+" não está cadastrado";
-            System.out.println("+"+"-".repeat(51)+"+");
-            System.out.printf("| %s"+" ".repeat(50-nomeVerifica.length())+"|\n",nomeVerifica);
-            System.out.println("+"+"-".repeat(51)+"+");
         }
     }
 
     public void listarClubes(String nomeVerifica) {
-        this.escalaClubes();
         if(!nomeVerifica.isBlank()) {
             listarClube(nomeVerifica);
             return;
@@ -195,6 +284,17 @@ public class OrganizacaoFutebol {
         }
         System.out.println("+"+"-".repeat(52)+"+");
         
+    }
+
+    public boolean clubeCadastrado(String nomeClube) {
+        this.escalaClubes();
+        boolean exist = false;
+        for(Clube clube : this.getBra().getClubes()) {
+            if(nomeClube.toUpperCase().equals(clube.getNome().toUpperCase())) {
+                exist = true;
+            }
+        }
+        return exist;
     }
 
     public Brasileirao getBra() {

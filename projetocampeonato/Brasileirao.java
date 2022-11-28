@@ -101,6 +101,7 @@ public class Brasileirao extends Campeonato{
 
             if(!verificaRodada()) { // Se verificaRodada retornar false, é por que o todas as equipes já fizeram seus jogos e o brasileirão chegou ao fim
                 System.out.println("O brasileirão chegou ao fim!!");
+                this.printColocados();
                 return;
             }
 
@@ -145,16 +146,17 @@ public class Brasileirao extends Campeonato{
             rodada(1);
         }
         System.out.println("O brasileirão chegou ao fim!!");
+        this.printColocados();
         
     }
 
-    public ArrayList<ClubeCopaBrasil> passarColocados() { // Retorna o array 8 clubes que se colocaram para jogar na copa do brasil
+    public ArrayList<Clube> passarColocados() { // Retorna o array 8 clubes que se colocaram para jogar na copa do brasil
 
         if(this.getRodada() < 30) { // Só retorn o array de clubes quando o brasileirão acabar
             return null;
         }
 
-        ArrayList<ClubeCopaBrasil> aux = new ArrayList<ClubeCopaBrasil>(); //Inicia um array auxiliar para retornar o array de clubes que passaram
+        ArrayList<Clube> aux = new ArrayList<Clube>(); //Inicia um array auxiliar para retornar o array de clubes que passaram
 
         int counter = 0;
         for(ClubeBrasileirao clubes: this.getClubesAux()) { // Pega as primeiras 8 equipes do array de clubesAux
@@ -169,11 +171,20 @@ public class Brasileirao extends Campeonato{
             int score = clubes.getScore();
 
             //Cria um clube, passa os atributos e adiciona
-            ClubeCopaBrasil clubeCB = new ClubeCopaBrasil(nome,fundacao,local,torcida,score);
+            Clube clubeCB = new Clube(nome,fundacao,local,torcida,score);
             aux.add(clubeCB);
             counter++;
         }
         return aux;
+    }
+
+    private void printColocados() {
+        System.out.println("Clubes que vão para a Copa do Brasil: ");
+        System.out.println("+"+"-".repeat(15)+"+");
+        for(Clube clube : this.passarColocados()) {
+            System.out.println(clube.getNome());
+        }
+        System.out.println("+"+"-".repeat(15)+"+");
     }
 
     public ArrayList<ClubeBrasileirao> getClubes() {
