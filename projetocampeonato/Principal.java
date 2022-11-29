@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Principal{
     private Scanner scan = new Scanner(System.in);
     public static void main(String[] args) throws IOException {
-        printTitle("BOAS VINDAS AO SIMULADOR DE CAMPEONATO BRASILEIRO");
+        printTitle("BOAS VINDAS AO SIMULADOR DE CAMPEONATO");
         Principal p = new Principal();
         
         boolean saidaP = false;
@@ -33,7 +33,7 @@ public class Principal{
                                          "0 - Para voltar ao menu principal"};
                     boolean saidaB = false;
                     while(!saidaB) {
-                        menu("MENU BRASILEIRÃO", optionsB);
+                        menu("MENU BRASILEIRÃO ANIMA", optionsB);
                         System.out.print("Escolha uma opção: ");
                         
                         switch (p.entrada()) {
@@ -91,7 +91,7 @@ public class Principal{
                                          "0 - Para voltar ao menu principal"};
                     boolean saidaC = false;
                     while(!saidaC) {
-                        menu("MENU COPA DO BRASIL", optionsC);
+                        menu("MENU COPA FACS", optionsC);
                         System.out.print("Escolha uma opção: ");
                         
                         switch (p.entrada()) {

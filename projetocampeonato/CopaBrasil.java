@@ -21,7 +21,7 @@ public class CopaBrasil extends Campeonato{
         super.setRodada(0);
         //Verifica se o array de colocados está vazio, se estiver vazio é porque o brasileirão não acabou ainda
         if(this.getColocados().isEmpty()) { 
-            System.out.println("Deve ser termindado o Brasileirão!!");
+            System.out.println("Deve ser termindado o Brasileirão Anima!!");
             return;
         }
 
@@ -77,7 +77,7 @@ public class CopaBrasil extends Campeonato{
         }
 
         if(this.getChave().size() == 1) { //Retorna se só tiver uma equipe na chave, pois a copa do brasil chegou ao fim
-            System.out.printf("A copa do brasil chegou ao fim, o %s é o vencedor da Copa do Brasil!!!\n", this.getChave().get(0).getNome());
+            System.out.printf("A copa do brasil chegou ao fim, o %s é o vencedor da Copa Facs!!!\n", this.getChave().get(0).getNome());
             return;
         }
 
@@ -143,7 +143,7 @@ public class CopaBrasil extends Campeonato{
         for(int k = 0; k < qRodada; k++) {
             super.setRodada(super.getRodada()+1);
             if(this.chave.size() <= 1) {
-                System.out.printf("O %s é o vencedor da Copa do Brasil!!!\n", this.chave.get(0).getNome());
+                System.out.printf("O %s é o vencedor da Copa Facs!!!\n", this.chave.get(0).getNome());
                 return;
             }
             this.tabela();

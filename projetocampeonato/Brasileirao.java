@@ -97,7 +97,7 @@ public class Brasileirao extends Campeonato{
                 this.getClubes().get(this.getClubes().indexOf(clube2)).setPontuacao(pontuacaoClube2 + 1);
                 this.getClubes().get(this.getClubes().indexOf(clube1)).getPartidas()[2] += 1; //Adiciona um empate ao clube1
                 this.getClubes().get(this.getClubes().indexOf(clube2)).getPartidas()[2] += 1; //Adiciona um empate ao clube2
-                System.out.printf("O %s Empatou com %s\n", clube1.getNome(), clube2.getNome());
+                System.out.printf("O %s empatou com %s\n", clube1.getNome(), clube2.getNome());
                 break;
             default:
                 break;
@@ -132,7 +132,7 @@ public class Brasileirao extends Campeonato{
             this.setClubesDisponiveis(new ArrayList<ClubeBrasileirao>(this.getClubes())); // Re-atualiza os clubes disponiveis a cada rodada
 
             if(!verificaRodada()) {
-                System.out.println("O brasileirão chegou ao fim!!");
+                System.out.println("O Brasileirão Anima chegou ao fim!!");
                 this.printColocados();
                 return;
             }
@@ -183,7 +183,7 @@ public class Brasileirao extends Campeonato{
         while(this.getRodada() != 30) {
             rodada(1);
         }
-        System.out.println("O brasileirão chegou ao fim!!");
+        System.out.println("O Brasileirão Anima chegou ao fim!!");
         this.printColocados();
         
     }
